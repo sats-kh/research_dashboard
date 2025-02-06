@@ -1,131 +1,172 @@
-# dashboard.py
+import os
+from datetime import datetime
 import dash
 from dash import dcc, html
 import plotly.graph_objs as go
 from utils import get_status_color, calculate_progress
-from database import get_projects
-from graphs import create_progress_graph, create_budget_graph, create_research_graphs
+from database import get_projects, get_milestones, DB_NAME
+from graphs import create_progress_graph, create_budget_graph, create_research_graphs, create_milestone_graph
 
 def init_dashboard(flask_app):
+    external_stylesheets = [
+        '/static/font/pretendard.css',
+        '/static/font/pretendard-subset.css'
+    ]
+
     dash_app = dash.Dash(
         __name__,
         server=flask_app,
-        routes_pathname_prefix='/dashboard/'
+        routes_pathname_prefix='/dashboard/',
+        external_stylesheets=external_stylesheets
     )
-    
-    # 연구과제 데이터 불러오기 및 진행률 업데이트
-    projects = get_projects()
-    for project in projects:
-        project["progress"] = calculate_progress(project["start_date"], project["end_date"])
-    
-    # 통계 값 계산
-    total_projects = len(projects)
-    avg_progress = sum(p["progress"] for p in projects) / total_projects if total_projects > 0 else 0
-    total_budget = sum(p["total_cost"] for p in projects)
 
-    # 그래프 생성
-    progress_graph = create_progress_graph(projects)
-    budget_graph = create_budget_graph(projects)
-    research_graphs = create_research_graphs(projects)
-
-    # Dash 대시보드 레이아웃 구성
-    dash_app.layout = html.Div(style={"backgroundColor": "#1E1E2E", "color": "white", "padding": "20px"}, children=[
-        html.H1("재난안전융합연구센터 연구과제 대시보드", style={"textAlign": "center"}),
+    def serve_layout():
+        # DB에서 최신 데이터를 불러오고 진행률 계산
+        projects = get_projects()
+        for project in projects:
+            project["progress"] = calculate_progress(project["start_date"], project["end_date"])
         
-        # 주요 통계 카드 (grid 레이아웃)
-        html.Div(
+        # 주요 통계 값 계산
+        total_projects = len(projects)
+        avg_progress = sum(p["progress"] for p in projects) / total_projects if total_projects > 0 else 0
+        total_budget = sum(p["total_cost"] for p in projects)
+        
+        # 그래프 생성 (최신 데이터를 기반으로)
+        progress_graph = create_progress_graph(projects)
+        budget_graph = create_budget_graph(projects)
+        research_graphs = create_research_graphs(projects)
+        # DB에서 마일스톤 데이터 불러오기 및 그래프 생성
+        milestones_data = get_milestones()
+        milestone_graph = create_milestone_graph(milestones_data)
+        
+        # 데이터베이스 파일의 최종 수정 시간 가져오기
+        db_last_update = datetime.fromtimestamp(os.path.getmtime(DB_NAME)).strftime("%Y-%m-%d")
+        
+        return html.Div(
             style={
-                "display": "grid",
-                "gridTemplateColumns": "repeat(4, 1fr)",  # 4개의 카드가 한 줄에 표시됨
-                "gap": "15px",
-                "marginBottom": "20px"
+                "backgroundColor": "#1E1E2E",
+                "color": "white",
+                "padding": "20px",
+                "position": "relative",
+                "fontFamily": "'Pretendard', sans-serif"
             },
             children=[
+                # 우측 상단에 DB 최종 수정 날짜 표시
+                html.Div(
+                    f"마지막 업데이트: {db_last_update}",
+                    style={
+                        "position": "absolute",
+                        "top": "10px",
+                        "right": "20px",
+                        "fontSize": "12px",
+                        "color": "white",
+                        "fontFamily": "'Pretendard', sans-serif"
+                    }
+                ),
+                html.H1(
+                    "재난안전융합연구센터 연구과제 대시보드",
+                    style={
+                        "textAlign": "center",
+                        "marginTop": "40px",
+                        "fontFamily": "'Pretendard', sans-serif"
+                    }
+                ),
+                # 주요 통계 카드 (grid 레이아웃)
                 html.Div(
                     style={
-                        "backgroundColor": "#2E2E3E",
-                        "padding": "15px",
-                        "borderRadius": "8px",
-                        "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
-                        "textAlign": "center"
+                        "display": "grid",
+                        "gridTemplateColumns": "repeat(4, 1fr)",
+                        "gap": "15px",
+                        "marginBottom": "20px",
+                        "fontFamily": "'Pretendard', sans-serif"
                     },
                     children=[
-                        html.H3("총 연구과제"),
-                        html.H2(f"{total_projects} 개")
+                        html.Div(
+                            style={
+                                "backgroundColor": "#2E2E3E",
+                                "padding": "15px",
+                                "borderRadius": "8px",
+                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                "textAlign": "center",
+                                "fontFamily": "'Pretendard', sans-serif"
+                            },
+                            children=[
+                                html.H3("총 연구과제", style={"fontFamily": "'Pretendard', sans-serif"}),
+                                html.H2(f"{total_projects} 개", style={"fontFamily": "'Pretendard', sans-serif"})
+                            ]
+                        ),
+                        html.Div(
+                            style={
+                                "backgroundColor": "#2E2E3E",
+                                "padding": "15px",
+                                "borderRadius": "8px",
+                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                "textAlign": "center",
+                                "fontFamily": "'Pretendard', sans-serif"
+                            },
+                            children=[
+                                html.H3("평균 진행률", style={"fontFamily": "'Pretendard', sans-serif"}),
+                                html.H2(f"{avg_progress:.1f}%", style={"fontFamily": "'Pretendard', sans-serif"})
+                            ]
+                        ),
+                        html.Div(
+                            style={
+                                "backgroundColor": "#2E2E3E",
+                                "padding": "15px",
+                                "borderRadius": "8px",
+                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                "textAlign": "center",
+                                "fontFamily": "'Pretendard', sans-serif"
+                            },
+                            children=[
+                                html.H3("총 예산", style={"fontFamily": "'Pretendard', sans-serif"}),
+                                html.H2(f"{total_budget} 백만원", style={"fontFamily": "'Pretendard', sans-serif"})
+                            ]
+                        ),
+                        html.Div(
+                            style={
+                                "backgroundColor": "#2E2E3E",
+                                "padding": "15px",
+                                "borderRadius": "8px",
+                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                "textAlign": "center",
+                                "fontFamily": "'Pretendard', sans-serif"
+                            },
+                            children=[
+                                html.H3("참여 인원", style={"fontFamily": "'Pretendard', sans-serif"}),
+                                html.H2("X 명", style={"fontFamily": "'Pretendard', sans-serif"})
+                            ]
+                        )
                     ]
                 ),
+                # 그래프 배치 (2개의 동일한 컬럼)
                 html.Div(
                     style={
-                        "backgroundColor": "#2E2E3E",
-                        "padding": "15px",
-                        "borderRadius": "8px",
-                        "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
-                        "textAlign": "center"
+                        "display": "grid",
+                        "gridTemplateColumns": "repeat(2, 1fr)",
+                        "gap": "20px",
+                        "fontFamily": "'Pretendard', sans-serif"
                     },
                     children=[
-                        html.H3("평균 진행률"),
-                        html.H2(f"{avg_progress:.1f}%")
+                        dcc.Graph(figure=progress_graph, style={"width": "100%"}),
+                        html.Div(children=research_graphs, style={"width": "100%"})
                     ]
                 ),
+                # 마일스톤 그래프 영역 (단일 컬럼, 상단 여백 추가)
                 html.Div(
                     style={
-                        "backgroundColor": "#2E2E3E",
-                        "padding": "15px",
-                        "borderRadius": "8px",
-                        "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
-                        "textAlign": "center"
+                        "display": "grid",
+                        "gridTemplateColumns": "1fr",
+                        "gap": "20px",
+                        "marginTop": "40px",
+                        "fontFamily": "'Pretendard', sans-serif"
                     },
                     children=[
-                        html.H3("총 예산"),
-                        html.H2(f"{total_budget} 백만원")
-                    ]
-                ),
-                html.Div(
-                    style={
-                        "backgroundColor": "#2E2E3E",
-                        "padding": "15px",
-                        "borderRadius": "8px",
-                        "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
-                        "textAlign": "center"
-                    },
-                    children=[
-                        html.H3("참여 인원"),
-                        html.H2("X 명")
+                        html.Div(children=milestone_graph, style={"width": "100%"})
                     ]
                 )
             ]
-        ),
-        # 연구과제 개별 진행 상태 카드
-        html.Div(style={"display": "grid", "gridTemplateColumns": "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr", "gap": "15px", "marginBottom": "20px"}, children=[
-            html.Div(style={
-                "backgroundColor": "#333",
-                "padding": "15px",
-                "borderRadius": "8px",
-                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
-                "textAlign": "center"
-            }, children=[
-                html.H3(project["name"]),
-                html.P(f"담당자: {project['manager']}"),
-                html.Div(style={
-                    "backgroundColor": get_status_color(project["progress"]),
-                    "color": "white",
-                    "padding": "5px",
-                    "borderRadius": "5px",
-                    "display": "inline-block"
-                }, children=f"진행률: {project['progress']}%")
-            ]) for project in projects
-        ]),
-        # 그래프 배치
-        html.Div(
-            style={
-                "display": "grid",
-                "gridTemplateColumns": "repeat(3, 1fr)",  # 3개의 동일한 컬럼 생성
-                "gap": "20px"
-            },
-            children=[
-                dcc.Graph(figure=progress_graph),
-                dcc.Graph(figure=budget_graph),
-                html.Div(children=research_graphs)
-            ]
         )
-    ])
+    
+    dash_app.layout = serve_layout
+    return dash_app

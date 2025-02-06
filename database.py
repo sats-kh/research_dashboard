@@ -2,6 +2,11 @@ import sqlite3
 
 DB_NAME = "projects.db"
 
+def get_connection():
+    conn = sqlite3.connect(DB_NAME)
+    conn.row_factory = sqlite3.Row
+    return conn
+
 # 데이터베이스 초기화
 def create_database():
     conn = sqlite3.connect(DB_NAME)
@@ -23,6 +28,22 @@ def create_database():
             current_patents_registered INTEGER DEFAULT 0,
             goal_software INTEGER DEFAULT 0,
             current_software INTEGER DEFAULT 0
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+def create_milestones_table():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS milestones (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Milestone TEXT NOT NULL,
+            Start TEXT NOT NULL,
+            Finish TEXT NOT NULL,
+            Status TEXT NOT NULL,
+            "세부 목표" TEXT
         )
     ''')
     conn.commit()
@@ -123,8 +144,47 @@ def add_project(name, manager, start_date, end_date, total_cost, current_expendi
     conn.commit()
     conn.close()
 
-# 실행 시 자동 초기화
+def get_milestones():
+    conn = sqlite3.connect(DB_NAME)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM milestones")
+    rows = cur.fetchall()
+    conn.close()
+    milestones = [dict(row) for row in rows]
+    return milestones
+
+def update_milestone(milestone_id, milestone_text, start, finish, status, detail):
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE milestones
+        SET Milestone = ?, Start = ?, Finish = ?, Status = ?, "세부 목표" = ?
+        WHERE id = ?
+    """, (milestone_text, start, finish, status, detail, milestone_id))
+    conn.commit()
+    conn.close()
+
+def delete_milestone(milestone_id):
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+    cur.execute("DELETE FROM milestones WHERE id = ?", (milestone_id,))
+    conn.commit()
+    conn.close()
+
+def add_milestone(milestone_text, start, finish, status, detail):
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO milestones (Milestone, Start, Finish, Status, "세부 목표")
+        VALUES (?, ?, ?, ?, ?)
+    """, (milestone_text, start, finish, status, detail))
+    conn.commit()
+    conn.close()
+
 if __name__ == "__main__":
-    create_database()
-    insert_sample_data()
+    # create_database()
+    # insert_sample_data()
+    create_milestones_table()
+
     print("Database initialized successfully!")

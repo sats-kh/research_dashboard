@@ -1,7 +1,11 @@
 # graphs.py
 import math
 import plotly.graph_objs as go
+import plotly.express as px
+from datetime import datetime, timedelta
+
 from dash import dcc, html
+import pandas as pd
 
 def create_progress_graph(projects):
     fig = go.Figure()
@@ -138,3 +142,61 @@ def create_research_graphs(projects):
             "overflowX": "auto"
         }
     )
+
+def create_milestone_graph(milestones_data):
+    """
+    milestones_data: DB에서 불러온 마일스톤 데이터 리스트 (각 항목은 딕셔너리이며, 키는
+    "Milestone", "Start", "Finish", "Status", "세부 목표" 등을 포함)
+    """
+    # DB 데이터를 DataFrame으로 변환
+    df = pd.DataFrame(milestones_data)
+    
+    # 만약 DB에 데이터가 없으면, 샘플 데이터를 사용
+    if df.empty:
+        data = [
+            {"Milestone": "AI 연구 담당자 김연구", "Start": "2025-03-15", "Finish": "2025-04-15", "Status": "달성", "세부 목표": "논문 작성"},
+            {"Milestone": "블록체인 분석 담당자 박연구", "Start": "2025-03-07", "Finish": "2025-03-18", "Status": "달성", "세부 목표": "특허 출원"},
+            {"Milestone": "로봇 자동화 담당자 이연구", "Start": "2025-04-01", "Finish": "2025-04-30", "Status": "달성", "세부 목표": "특허 등록"},
+            {"Milestone": "Test 담당자 이관훈", "Start": "2025-02-02", "Finish": "2025-02-13", "Status": "달성", "세부 목표": "특허 등록"},
+            {"Milestone": "Test2 담당자 홍길동", "Start": "2025-04-22", "Finish": "2025-04-25", "Status": "달성", "세부 목표": "특허 등록"},
+        ]
+        df = pd.DataFrame(data)
+    
+    # 각 마일스톤을 기준으로 색상을 자동 지정 (y축: Milestone)
+    fig = px.timeline(
+        df,
+        x_start="Start",
+        x_end="Finish",
+        y="Milestone",
+        color="Milestone",
+        text="세부 목표",
+        color_discrete_sequence=px.colors.qualitative.Plotly  # Plotly 기본 색상 시퀀스 사용
+    )
+    
+    # y축: 위쪽부터 시작하도록 설정
+    fig.update_yaxes(autorange="reversed")
+    
+    # 텍스트 라벨 위치 및 서식 조정
+    fig.update_traces(textposition='inside', textfont_color='white')
+    
+    # x축 범위를 현재 시간부터 일주일 후로 기본 설정 (날짜 형식에 맞게 datetime 객체 사용)
+    now = datetime.now()
+    one_week_later = now + timedelta(days=14)
+    fig.update_layout(xaxis_range=[now, one_week_later])
+    
+    # 레이아웃 설정 및 범례 제거
+    fig.update_layout(
+        title=dict(
+            text="프로젝트별 마일스톤 진행률",
+            x=0.5,
+            font=dict(family="Arial Bold", size=20, color="white")
+        ),
+        template="plotly_dark",
+        paper_bgcolor="#2E2E3E",
+        plot_bgcolor="#2E2E3E",
+        height=400,
+        margin=dict(l=40, r=20, t=40, b=40),
+        showlegend=False
+    )
+    
+    return dcc.Graph(figure=fig)

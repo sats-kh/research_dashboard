@@ -5,6 +5,13 @@
   <title>연구과제 대시보드</title>
   <!-- static 폴더에 있는 CSS 파일 링크 -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='font/pretendard.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='font/pretendard-subset.css') }}">
+  <style>
+    * {
+      font-family: 'Pretendard', sans-serif;
+    }
+  </style>
 </head>
 <body>
   <h1 style="text-align:center;">연구과제 대시보드</h1>

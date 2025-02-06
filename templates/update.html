@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>연구과제 관리</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='font/pretendard.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='font/pretendard-subset.css') }}">
+
+  <style>
+    * {
+      font-family: 'Pretendard', sans-serif;
+    }
+    .project-card {
+      background-color: #2E2E3E;
+      border-radius: 8px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+      padding: 15px;
+      margin-bottom: 15px;
+      color: white;
+    }
+    .project-card h5 {
+      margin-bottom: 10px;
+    }
+    .project-form .form-control {
+      background-color: #1E1E2E;
+      border: none;
+      color: white;
+    }
+    .project-form .form-control:focus {
+      box-shadow: none;
+    }
+    .form-label {
+      font-weight: bold;
+    }
+    /* 구분선 스타일 */
+    .form-divider {
+      border-top: 1px solid #444;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body class="container mt-4">
+  <h2 class="text-center mb-4">연구과제 관리</h2>
+  
+  <!-- 새 연구과제 추가 -->
+  <div class="card mb-4" style="background-color:#2e333e; border-radius:8px; box-shadow:2px 2px 8px rgba(0,0,0,0.5);">
+    <div class="card-body">
+      <h4 class="card-title text-center text-white mb-4">새 연구과제 추가</h4>
+      <form method="post">
+        <input type="hidden" name="action" value="add">
+        
+        <!-- 기본 정보 -->
+        <div class="mb-3">
+          <label for="name" class="form-label text-white">프로젝트명</label>
+          <input type="text" class="form-control" name="name" id="name" placeholder="프로젝트명을 입력하세요">
+        </div>
+        <div class="mb-3">
+          <label for="manager" class="form-label text-white">담당자</label>
+          <input type="text" class="form-control" name="manager" id="manager" placeholder="담당자를 입력하세요">
+        </div>
+        
+        <hr class="form-divider">
+        
+        <!-- 기간 -->
+        <div class="row g-2">
+          <div class="col-md-6 mb-3">
+            <label for="start_date" class="form-label text-white">시작일</label>
+            <input type="date" class="form-control" name="start_date" id="start_date">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="end_date" class="form-label text-white">마감일</label>
+            <input type="date" class="form-control" name="end_date" id="end_date">
+          </div>
+        </div>
+        
+        <hr class="form-divider">
+        
+        <!-- 예산 관련 -->
+        <div class="row g-2">
+          <div class="col-md-6 mb-3">
+            <label for="total_cost" class="form-label text-white">총 예산(단위: 백만원)</label>
+            <input type="number" class="form-control" name="total_cost" id="total_cost">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="current_expenditure" class="form-label text-white">현재 소진 금액(단위: 백만원)</label>
+            <input type="number" class="form-control" name="current_expenditure" id="current_expenditure">
+          </div>
+        </div>
+        
+        <hr class="form-divider">
+        
+        <!-- 논문 관련 -->
+        <div class="row g-2">
+          <div class="col-md-6 mb-3">
+            <label for="goal_papers" class="form-label text-white">논문 목표 개수</label>
+            <input type="number" class="form-control" name="goal_papers" id="goal_papers">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="current_papers" class="form-label text-white">논문 결과</label>
+            <input type="number" class="form-control" name="current_papers" id="current_papers">
+          </div>
+        </div>
+        
+        <hr class="form-divider">
+        
+        <!-- 특허 관련 -->
+        <div class="row g-2">
+          <div class="col-md-6 mb-3">
+            <label for="goal_patents_filed" class="form-label text-white">특허(출원) 목표</label>
+            <input type="number" class="form-control" name="goal_patents_filed" id="goal_patents_filed">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="current_patents_filed" class="form-label text-white">특허(출원) 결과</label>
+            <input type="number" class="form-control" name="current_patents_filed" id="current_patents_filed">
+          </div>
+
+        </div>
+        <div class="row g-2">
+          <div class="col-md-6 mb-3">
+            <label for="goal_patents_registered" class="form-label text-white">특허(등록) 목표</label>
+            <input type="number" class="form-control" name="goal_patents_registered" id="goal_patents_registered">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="current_patents_registered" class="form-label text-white">특허(등록) 결과</label>
+            <input type="number" class="form-control" name="current_patents_registered" id="current_patents_registered">
+          </div>
+        </div>
+        
+        <hr class="form-divider">
+        
+        <!-- SW 관련 -->
+        <div class="row g-2">
+          <div class="col-md-6 mb-3">
+            <label for="goal_software" class="form-label text-white">SW 목표</label>
+            <input type="number" class="form-control" name="goal_software" id="goal_software">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="current_software" class="form-label text-white">SW 결과</label>
+            <input type="number" class="form-control" name="current_software" id="current_software">
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary">새 연구과제 추가</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 연구과제 목록 -->
+  <div class="mb-5">
+    {% for project in projects %}
+    <div class="project-card">
+      <form method="post" class="project-form">
+        <input type="hidden" name="id" value="{{ project.id }}">
+        <!-- 기본 정보 -->
+        <div class="row g-2 align-items-center">
+          <div class="col-md-3">
+            <label class="form-label">프로젝트명</label>
+            <input type="text" name="name" value="{{ project.name }}" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">담당자</label>
+            <input type="text" name="manager" value="{{ project.manager }}" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">시작일</label>
+            <input type="date" name="start_date" value="{{ project.start_date }}" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">마감일</label>
+            <input type="date" name="end_date" value="{{ project.end_date }}" class="form-control">
+          </div>
+        </div>
+        
+        <hr class="form-divider">
+        
+        <!-- 예산 및 논문 -->
+        <div class="row g-2 mt-2">
+          <div class="col-md-3">
+            <label class="form-label">총 예산(단위: 백만원)</label>
+            <input type="number" name="total_cost" value="{{ project.total_cost }}" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">소진 금액(단위: 백만원)</label>
+            <input type="number" name="current_expenditure" value="{{ project.current_expenditure }}" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">논문 목표</label>
+            <input type="number" name="goal_papers" value="{{ project.goal_papers }}" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">논문 결과</label>
+            <input type="number" name="current_papers" value="{{ project.current_papers }}" class="form-control">
+          </div>
+        </div>
+        
+        <hr class="form-divider">
+        
+        <!-- 특허 관련 -->
+        <div class="row g-2 mt-2">
+          <div class="col-md-3">
+            <label class="form-label">특허(출원) 목표</label>
+            <input type="number" name="goal_patents_filed" value="{{ project.goal_patents_filed }}" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">특허(출원) 결과</label>
+            <input type="number" name="current_patents_filed" value="{{ project.current_patents_filed }}" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">특허(등록) 목표</label>
+            <input type="number" name="goal_patents_registered" value="{{ project.goal_patents_registered }}" class="form-control">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">특허(등록) 결과</label>
+            <input type="number" name="current_patents_registered" value="{{ project.current_patents_registered }}" class="form-control">
+          </div>
+        </div>
+        
+        <hr class="form-divider">
+        
+        <!-- SW 관련 -->
+        <div class="row g-2 mt-2">
+          <div class="col-md-6">
+            <label class="form-label">SW 목표</label>
+            <input type="number" name="goal_software" value="{{ project.goal_software }}" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">SW 결과</label>
+            <input type="number" name="current_software" value="{{ project.current_software }}" class="form-control">
+          </div>
+        </div>
+        
+        <div class="mt-3 d-flex justify-content-end">
+          <button type="submit" name="action" value="update" class="btn btn-success me-2">수정</button>
+          <button type="submit" name="action" value="delete" class="btn btn-danger">삭제</button>
+        </div>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
