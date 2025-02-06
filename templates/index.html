@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>연구과제 대시보드</title>
+  <!-- static 폴더에 있는 CSS 파일 링크 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1 style="text-align:center;">연구과제 대시보드</h1>
+  <div class="grid-container">
+    {% for project in projects %}
+    <div class="card">
+      <h3>{{ project.name }}</h3>
+      <p><strong>담당자:</strong> {{ project.manager }}</p>
+      <p><strong>진행률:</strong> {{ project.progress }}%</p>
+      <p><strong>시작일:</strong> {{ project.start_date }} &nbsp; <strong>마감일:</strong> {{ project.end_date }}</p>
+      <p><strong>총 과제 비용:</strong> {{ project.total_cost }}</p>
+      <p><strong>현재 소진 금액:</strong> {{ project.current_expenditure }}</p>
+      <p><strong>최종 목표:</strong> {{ project.final_goal }}</p>
+      <p><strong>최종 결과물:</strong> {{ project.final_deliverables }}</p>
+      <p><strong>현재 결과물:</strong> {{ project.current_deliverables }}</p>
+      <p><strong>비고:</strong> {{ project.note }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

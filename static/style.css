@@ -1,0 +1,44 @@
+/* 그리드 컨테이너 설정 */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 20px;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+/* 카드 스타일 */
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.card p {
+  margin: 5px 0;
+}
+
+/* 상태 라벨 스타일 */
+.status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+  font-size: 0.9em;
+}
+
+.in-progress { background-color: #5cb85c; }
+.completed  { background-color: #0275d8; }
+.delayed    { background-color: #d9534f; }

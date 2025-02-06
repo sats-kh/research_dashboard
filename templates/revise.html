@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>연구과제 관리</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+  <h2 class="text-center">연구과제 관리</h2>
+
+  <!-- 연구과제 목록 -->
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>프로젝트명</th>
+        <th>담당자</th>
+        <th>시작일</th>
+        <th>마감일</th>
+        <th>총 예산</th>
+        <th>소진 금액</th>
+        <th>논문 목표</th>
+        <th>논문 결과</th>
+        <th>특허(출원) 목표</th>
+        <th>특허(출원) 결과</th>
+        <th>특허(등록) 목표</th>
+        <th>특허(등록) 결과</th>
+        <th>SW 목표</th>
+        <th>SW 결과</th>
+        <th>수정</th>
+        <th>삭제</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for project in projects %}
+      <tr>
+        <form method="post">
+          <input type="hidden" name="id" value="{{ project.id }}">
+          <td><input type="text" name="name" value="{{ project.name }}" class="form-control"></td>
+          <td><input type="text" name="manager" value="{{ project.manager }}" class="form-control"></td>
+          <td><input type="date" name="start_date" value="{{ project.start_date }}" class="form-control"></td>
+          <td><input type="date" name="end_date" value="{{ project.end_date }}" class="form-control"></td>
+          <td><input type="number" name="total_cost" value="{{ project.total_cost }}" class="form-control"></td>
+          <td><input type="number" name="current_expenditure" value="{{ project.current_expenditure }}" class="form-control"></td>
+          <td><input type="number" name="goal_papers" value="{{ project.goal_papers }}" class="form-control"></td>
+          <td><input type="number" name="current_papers" value="{{ project.current_papers }}" class="form-control"></td>
+          <td><input type="number" name="goal_patents_filed" value="{{ project.goal_patents_filed }}" class="form-control"></td>
+          <td><input type="number" name="current_patents_filed" value="{{ project.current_patents_filed }}" class="form-control"></td>
+          <td><input type="number" name="goal_patents_registered" value="{{ project.goal_patents_registered }}" class="form-control"></td>
+          <td><input type="number" name="current_patents_registered" value="{{ project.current_patents_registered }}" class="form-control"></td>
+          <td><input type="number" name="goal_software" value="{{ project.goal_software }}" class="form-control"></td>
+          <td><input type="number" name="current_software" value="{{ project.current_software }}" class="form-control"></td>
+          <td>
+            <button type="submit" name="action" value="update" class="btn btn-success">수정</button>
+          </td>
+          <td>
+            <button type="submit" name="action" value="delete" class="btn btn-danger">삭제</button>
+          </td>
+        </form>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- 연구과제 추가 -->
+  <h3>새 연구과제 추가</h3>
+  <form method="post">
+    <input type="hidden" name="action" value="add">
+    <div class="mb-3">
+      <label for="name" class="form-label">프로젝트명</label>
+      <input type="text" class="form-control" name="name" id="name">
+    </div>
+    <div class="mb-3">
+      <label for="manager" class="form-label">담당자</label>
+      <input type="text" class="form-control" name="manager" id="manager">
+    </div>
+    <div class="mb-3">
+      <label for="start_date" class="form-label">시작일</label>
+      <input type="date" class="form-control" name="start_date" id="start_date">
+    </div>
+    <div class="mb-3">
+      <label for="end_date" class="form-label">마감일</label>
+      <input type="date" class="form-control" name="end_date" id="end_date">
+    </div>
+    <div class="mb-3">
+      <label for="total_cost" class="form-label">총 예산</label>
+      <input type="number" class="form-control" name="total_cost" id="total_cost">
+    </div>
+    <div class="mb-3">
+      <label for="current_expenditure" class="form-label">소진 금액</label>
+      <input type="number" class="form-control" name="current_expenditure" id="current_expenditure">
+    </div>
+    <div class="mb-3">
+      <label for="goal_papers" class="form-label">논문 목표</label>
+      <input type="number" class="form-control" name="goal_papers" id="goal_papers">
+    </div>
+    <div class="mb-3">
+      <label for="current_papers" class="form-label">논문 결과</label>
+      <input type="number" class="form-control" name="current_papers" id="current_papers">
+    </div>
+    <div class="mb-3">
+      <label for="goal_patents_filed" class="form-label">특허(출원) 목표</label>
+      <input type="number" class="form-control" name="goal_patents_filed" id="goal_patents_filed">
+    </div>
+    <div class="mb-3">
+      <label for="current_patents_filed" class="form-label">특허(출원) 결과</label>
+      <input type="number" class="form-control" name="current_patents_filed" id="current_patents_filed">
+    </div>
+    <div class="mb-3">
+      <label for="goal_patents_registered" class="form-label">특허(등록) 목표</label>
+      <input type="number" class="form-control" name="goal_patents_registered" id="goal_patents_registered">
+    </div>
+    <div class="mb-3">
+      <label for="current_patents_registered" class="form-label">특허(등록) 결과</label>
+      <input type="number" class="form-control" name="current_patents_registered" id="current_patents_registered">
+    </div>
+    <div class="mb-3">
+      <label for="goal_software" class="form-label">SW 목표</label>
+      <input type="number" class="form-control" name="goal_software" id="goal_software">
+    </div>
+    <div class="mb-3">
+      <label for="current_software" class="form-label">SW 결과</label>
+      <input type="number" class="form-control" name="current_software" id="current_software">
+    </div>
+    <button type="submit" class="btn btn-primary">새 연구과제 추가</button>
+  </form>
+</body>
+</html>
