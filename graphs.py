@@ -290,8 +290,8 @@ def create_milestone_graph(milestones_data):
         trace.update(
             textposition='inside',
             # insidetextanchor='middle',  # 텍스트를 바 내부 중앙에 정렬
-            textfont=dict(family="Pretendard", size=36, color="white"),
-            width=1,
+            textfont=dict(family="Pretendard", size=36, color="white", ),
+            width=0.95,
         )
     
     now = datetime.now()
