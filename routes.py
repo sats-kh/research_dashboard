@@ -52,26 +52,28 @@ def update():
     for project in projects:
         project["progress"] = calculate_progress(project["start_date"], project["end_date"])
     return render_template('update.html', projects=projects)
-
+    
 @milestone_blueprint.route('/milestone', methods=['GET', 'POST'])
 def milestone():
     if request.method == 'POST':
         action = request.form.get("action")
         if action:
             milestone_id = request.form.get("id")
-            # 마일스톤 제목은 드롭다운으로 선택하므로, 텍스트 대신 선택된 연구과제명을 받아옴.
+            # 마일스톤 제목은 드롭다운으로 선택하므로, 선택된 연구과제명을 받아옴.
             milestone_text = request.form.get("Milestone", "")
             start = request.form.get("Start", "")
             finish = request.form.get("Finish", "")
             status = request.form.get("Status", "")
             detail = request.form.get("세부 목표", "")
+            # 새로 추가된 담당자 필드
+            manager = request.form.get("담당자", "")
             
             if action == "update" and milestone_id:
-                update_milestone(milestone_id, milestone_text, start, finish, status, detail)
+                update_milestone(milestone_id, milestone_text, start, finish, status, detail, manager)
             elif action == "delete" and milestone_id:
                 delete_milestone(milestone_id)
             elif action == "add":
-                add_milestone(milestone_text, start, finish, status, detail)
+                add_milestone(milestone_text, start, finish, status, detail, manager)
         return redirect('/milestone')
     
     milestones = get_milestones()

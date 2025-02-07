@@ -43,7 +43,8 @@ def create_milestones_table():
             Start TEXT NOT NULL,
             Finish TEXT NOT NULL,
             Status TEXT NOT NULL,
-            "세부 목표" TEXT
+            "세부 목표" TEXT,
+            담당자 TEXT
         )
     ''')
     conn.commit()
@@ -154,14 +155,14 @@ def get_milestones():
     milestones = [dict(row) for row in rows]
     return milestones
 
-def update_milestone(milestone_id, milestone_text, start, finish, status, detail):
+def update_milestone(milestone_id, milestone_text, start, finish, status, detail, manager):
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
     cur.execute("""
         UPDATE milestones
-        SET Milestone = ?, Start = ?, Finish = ?, Status = ?, "세부 목표" = ?
+        SET Milestone = ?, Start = ?, Finish = ?, Status = ?, "세부 목표" = ?, 담당자 = ?
         WHERE id = ?
-    """, (milestone_text, start, finish, status, detail, milestone_id))
+    """, (milestone_text, start, finish, status, detail, manager, milestone_id))
     conn.commit()
     conn.close()
 
@@ -172,19 +173,19 @@ def delete_milestone(milestone_id):
     conn.commit()
     conn.close()
 
-def add_milestone(milestone_text, start, finish, status, detail):
+def add_milestone(milestone_text, start, finish, status, detail, manager):
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
     cur.execute("""
-        INSERT INTO milestones (Milestone, Start, Finish, Status, "세부 목표")
-        VALUES (?, ?, ?, ?, ?)
-    """, (milestone_text, start, finish, status, detail))
+        INSERT INTO milestones (Milestone, Start, Finish, Status, "세부 목표", 담당자)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (milestone_text, start, finish, status, detail, manager))
     conn.commit()
     conn.close()
 
 if __name__ == "__main__":
-    # create_database()
-    # insert_sample_data()
+    create_database()
+    insert_sample_data()
     create_milestones_table()
 
     print("Database initialized successfully!")
