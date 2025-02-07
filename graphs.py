@@ -5,13 +5,20 @@ import plotly.express as px
 from datetime import datetime, timedelta
 from dash import dcc, html
 import pandas as pd
-
 def create_progress_graph(projects):
+    import plotly.express as px  # 이미 import 되어 있다면 생략 가능
+    # Plotly 기본 색상 팔레트 사용
+    color_palette = px.colors.qualitative.Plotly
+    
+    # 각 프로젝트 이름을 기준으로 색상을 할당 (일관된 색상 매핑)
+    project_names = [p["name"] for p in projects]
+    colors = [color_palette[hash(name) % len(color_palette)] for name in project_names]
+    
     fig = go.Figure()
     fig.add_trace(go.Bar(
-        x=[p["name"] for p in projects],
+        x=project_names,
         y=[p["progress"] for p in projects],
-        marker=dict(color=["#6A5ACD", "#FF4500", "#32CD32"], opacity=0.8),
+        marker=dict(color=colors, opacity=0.8),
         text=[f"{p['progress']}%" for p in projects],
         textposition="outside"
     ))
@@ -29,6 +36,7 @@ def create_progress_graph(projects):
         plot_bgcolor="#2E2E3E"
     )
     return fig  # Figure 객체 반환
+    
 def create_budget_graph(projects):
     fig = go.Figure()
     for idx, p in enumerate(projects):
@@ -152,12 +160,89 @@ def create_milestone_graph(milestones_data):
     
     # 만약 DB에 데이터가 없으면, 샘플 데이터를 사용 (샘플 데이터에 담당자도 포함)
     if df.empty:
+        now = datetime.now()
+
         data = [
-            {"Milestone": "AI 연구", "담당자": "김연구", "Start": "2025-03-15", "Finish": "2025-04-15", "Status": "달성", "세부 목표": "논문 작성"},
-            {"Milestone": "블록체인 분석", "담당자": "박연구", "Start": "2025-03-07", "Finish": "2025-03-18", "Status": "달성", "세부 목표": "특허 출원"},
-            {"Milestone": "로봇 자동화", "담당자": "이연구", "Start": "2025-04-01", "Finish": "2025-04-30", "Status": "달성", "세부 목표": "특허 등록"},
-            {"Milestone": "Test", "담당자": "이관훈", "Start": "2025-02-02", "Finish": "2025-02-13", "Status": "달성", "세부 목표": "특허 등록"},
-            {"Milestone": "Test2", "담당자": "홍길동", "Start": "2025-04-22", "Finish": "2025-04-25", "Status": "달성", "세부 목표": "특허 등록"},
+            {
+                "Milestone": "AI", 
+                "담당자": "김연구", 
+                "Start": (now + timedelta(days=1)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=31)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "논문 작성"
+            },
+            {
+                "Milestone": "블록체인", 
+                "담당자": "박연구", 
+                "Start": (now + timedelta(days=2)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=11)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "특허 출원"
+            },
+            {
+                "Milestone": "산불", 
+                "담당자": "이연구", 
+                "Start": (now + timedelta(days=3)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=33)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "특허 등록"
+            },
+            {
+                "Milestone": "홍수", 
+                "담당자": "이관훈", 
+                "Start": (now + timedelta(days=4)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=14)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "특허 등록"
+            },
+            {
+                "Milestone": "산사태", 
+                "담당자": "홍길동", 
+                "Start": (now + timedelta(days=5)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=8)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "특허 등록"
+            },
+            {
+                "Milestone": "밀집", 
+                "담당자": "김연구", 
+                "Start": (now + timedelta(days=6)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=36)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "논문 작성"
+            },
+            {
+                "Milestone": "블랙아이스", 
+                "담당자": "박연구", 
+                "Start": (now + timedelta(days=7)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=16)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "특허 출원"
+            },
+            {
+                "Milestone": "위성", 
+                "담당자": "이연구", 
+                "Start": (now + timedelta(days=8)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=38)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "특허 등록"
+            },
+            {
+                "Milestone": "로봇", 
+                "담당자": "이관훈", 
+                "Start": (now + timedelta(days=9)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=19)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "특허 등록"
+            },
+            {
+                "Milestone": "분산", 
+                "담당자": "홍길동", 
+                "Start": (now + timedelta(days=10)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=13)).strftime("%Y-%m-%d"), 
+                "Status": "달성", 
+                "세부 목표": "특허 등록"
+            },
         ]
         df = pd.DataFrame(data)
     
@@ -165,7 +250,7 @@ def create_milestone_graph(milestones_data):
     if "담당자" not in df.columns:
         df["담당자"] = ""
     
-    # "세부 목표"와 "담당자"를 결합한 텍스트 라벨 생성
+    # "세부 목표"와 "담당자"를 결합한 텍스트 라벨 생성 (예: "논문 작성 (김연구)")
     df["label"] = df["세부 목표"].astype(str) + " (" + df["담당자"].astype(str) + ")"
     
     # 각 마일스톤을 기준으로 색상을 자동 지정 (y축: Milestone)
@@ -175,22 +260,20 @@ def create_milestone_graph(milestones_data):
         x_end="Finish",
         y="Milestone",
         color="Milestone",
-        text="label",  # 결합된 텍스트 라벨 사용
-        color_discrete_sequence=px.colors.qualitative.Plotly  # Plotly 기본 색상 시퀀스 사용
+        text="label",
+        color_discrete_sequence=px.colors.qualitative.Plotly
     )
     
-    # y축: 위쪽부터 시작하도록 설정
     fig.update_yaxes(autorange="reversed")
     
-    # 텍스트 라벨 위치 및 서식 조정
-    fig.update_traces(textposition='inside', textfont_color='white')
+    # 개별 trace에 대해 textfont 속성 업데이트 (모든 trace에 대해 적용)
+    for trace in fig.data:
+        trace.update(textposition='inside', textfont=dict(color='white', size=80))
     
-    # x축 범위를 현재 시간부터 2주 후로 기본 설정 (날짜 형식에 맞게 datetime 객체 사용)
     now = datetime.now()
-    two_weeks_later = now + timedelta(days=14)
+    two_weeks_later = now + timedelta(days=7)
     fig.update_layout(xaxis_range=[now, two_weeks_later])
     
-    # 레이아웃 설정 및 범례 제거
     fig.update_layout(
         title=dict(
             text="프로젝트별 마일스톤 진행률",
@@ -200,7 +283,7 @@ def create_milestone_graph(milestones_data):
         template="plotly_dark",
         paper_bgcolor="#2E2E3E",
         plot_bgcolor="#2E2E3E",
-        height=400,
+        height=700,
         margin=dict(l=40, r=20, t=40, b=40),
         showlegend=False
     )
