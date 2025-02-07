@@ -66,8 +66,8 @@ def create_research_graphs(projects):
     research_graphs = []
     category_colors = {
         "논문": "#ECECEC",
-        "특허": "#ACACAC",
-        "SW": "#757575"
+        "특허": "#8A8A8A",
+        "SW": "#5E5E5E"
     }
     
     for project in projects:
@@ -268,7 +268,7 @@ def create_milestone_graph(milestones_data):
         df["담당자"] = ""
     
     # df["label"] = df["세부 목표"].astype(str) + " (" + df["담당자"].astype(str) + ")"
-    df["label"] = df["세부 목표"].astype(str)
+    df["label"] = df["세부 목표"].astype(str) + "    "
     
     # 고유한 Milestone 이름 목록 생성
     unique_milestones = sorted(set(df["Milestone"].unique()))
@@ -287,7 +287,12 @@ def create_milestone_graph(milestones_data):
     fig.update_yaxes(autorange="reversed")
     
     for trace in fig.data:
-        trace.update(textposition='inside', textfont=dict(color='white', size=36))
+        trace.update(
+            textposition='inside',
+            # insidetextanchor='middle',  # 텍스트를 바 내부 중앙에 정렬
+            textfont=dict(family="Pretendard", size=36, color="white"),
+            width=1,
+        )
     
     now = datetime.now()
     two_weeks_later = now + timedelta(days=21)
