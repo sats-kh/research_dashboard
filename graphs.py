@@ -8,7 +8,7 @@ import pandas as pd
 
 my_colors = [
     "#2DB9FF", "#D4FF00", "#FFC300",
-    "#C779FF", "#00FF2F", "#FFB5B5",
+    "#ECFF81", "#00FF2F", "#FFB5B5",
     "#FF00C3", "#686DFA", "#65FFF0",
     "#E7FF5D", "#FF8000", "#0048FF",
     "#2FFFAC", "#FF0000", "#AE00FF",
