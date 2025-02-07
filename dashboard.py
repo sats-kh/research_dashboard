@@ -147,7 +147,7 @@ def init_dashboard(flask_app):
                         )
                     ]
                 ),
-                # 그래프
+                # 연구과제 그래프 및 정량 성과지표
                 html.Div(
                     style={
                         "display": "grid",
@@ -166,7 +166,7 @@ def init_dashboard(flask_app):
                                         "fontFamily": "'Pretendard', sans-serif",
                                         "fontSize": "40px",
                                         "color": "white",
-                                        "marginBottom": "20px",
+                                        "marginBottom": "10px",
                                         "marginTop": "0px",
                                     }
                                 ),
@@ -193,7 +193,7 @@ def init_dashboard(flask_app):
                                         "fontFamily": "'Pretendard', sans-serif",
                                         "fontSize": "40px",
                                         "color": "white",
-                                        "marginBottom": "20px",
+                                        "marginBottom": "10px",
                                         "marginTop": "0px",
                                     }
                                 ),
@@ -219,10 +219,35 @@ def init_dashboard(flask_app):
                         "gridTemplateColumns": "1fr",
                         "gap": "20px",
                         "marginTop": "40px",
-                        "fontFamily": "'Pretendard', sans-serif"
+                        "fontFamily": "'Pretendard', sans-serif",
+                        "overflowX": "hidden"  # 부모 Div에 overflow 설정 추가
                     },
                     children=[
-                        html.Div(children=milestone_graph, style={"width": "100%"})
+                        html.P(
+                            "연구과제 마일스톤 진행률",
+                            style={
+                                "textAlign": "left",
+                                "fontFamily": "'Pretendard', sans-serif",
+                                "fontSize": "40px",
+                                "color": "white",
+                                "marginBottom": "10px",
+                                "marginTop": "0px"
+                            }
+                        ),
+                        html.Div(
+                            children=create_milestone_graph(milestones_data),  # milestone_graph을 dcc.Graph로 반환한 함수 호출
+                            style={
+                                "backgroundColor": "#2E2E3E",
+                                "padding": "15px",
+                                "borderRadius": "30px",
+                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                "textAlign": "center",
+                                "fontFamily": "'Pretendard', sans-serif",
+                                "width": "100%",
+                                "height": "960px",
+                                "overflowX": "hidden"  # 여기에도 overflow 설정 추가
+                            }
+                        )
                     ]
                 )
             ]

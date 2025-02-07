@@ -282,10 +282,8 @@ def create_milestone_graph(milestones_data):
     if "담당자" not in df.columns:
         df["담당자"] = ""
     
-    # "세부 목표"와 "담당자"를 결합한 텍스트 라벨 생성 (예: "논문 작성 (김연구)")
     df["label"] = df["세부 목표"].astype(str) + " (" + df["담당자"].astype(str) + ")"
     
-    # 각 마일스톤을 기준으로 색상을 자동 지정 (y축: Milestone)
     fig = px.timeline(
         df,
         x_start="Start",
@@ -298,7 +296,6 @@ def create_milestone_graph(milestones_data):
     
     fig.update_yaxes(autorange="reversed")
     
-    # 개별 trace에 대해 textfont 속성 업데이트 (모든 trace에 대해 적용)
     for trace in fig.data:
         trace.update(textposition='inside', textfont=dict(color='white', size=80))
     
@@ -308,16 +305,43 @@ def create_milestone_graph(milestones_data):
     
     fig.update_layout(
         title=dict(
-            text="프로젝트별 마일스톤 진행률",
             x=0.5,
-            font=dict(family="Arial Bold", size=20, color="white")
+            font=dict(family="Pretendard", size=20, color="white")
         ),
         template="plotly_dark",
         paper_bgcolor="#2E2E3E",
         plot_bgcolor="#2E2E3E",
-        height=700,
         margin=dict(l=40, r=20, t=40, b=40),
         showlegend=False
     )
+    fig.update_yaxes(
+        tickmode="linear",
+        dtick=1,
+        showgrid=True,
+        gridcolor="gray",
+        gridwidth=1,
+        tickson="boundaries"  # tick과 grid line을 카테고리 경계에 배치
+    )
+    fig.update_yaxes(position=0.05)
+    # dcc.Graph에 overflowX를 hidden으로 추가
+
+    # y축 제목 제거
+    fig.update_yaxes(title_text="")
     
-    return dcc.Graph(figure=fig)
+    # x, y축 tick 라벨 폰트 설정 (Pretendard, size 20)
+    fig.update_xaxes(tickfont=dict(family="Pretendard", size=20, color="white"),
+                     title_text="",
+                     side="bottom",
+                     linecolor="white",
+                     linewidth=2)
+    fig.update_yaxes(tickfont=dict(family="Pretendard", size=20, color="white"))
+    
+    return dcc.Graph(
+        figure=fig,
+        style={
+            "width": "100%",
+            "maxWidth": "100%",
+            "height": "100%",
+            "overflowX": "hidden"
+        }
+    )
