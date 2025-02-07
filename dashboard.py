@@ -117,7 +117,7 @@ def init_dashboard(flask_app):
                             },
                             children=[
                                 html.P("총 연구과제", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "36px", "marginBottom": "0px", "color":"#ACACAC"}),
-                                html.H2(f"{total_projects} 개", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "120px","marginTop": "4px", "marginBottom": "30px"})
+                                html.H2(f"{total_projects}", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "120px","marginTop": "4px", "marginBottom": "30px"})
                             ]
                         ),
                         html.Div(
