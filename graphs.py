@@ -6,14 +6,27 @@ from datetime import datetime, timedelta
 from dash import dcc, html
 import pandas as pd
 
+my_colors = [
+    "#2DB9FF", "#D4FF00", "#FFC300",
+    "#C779FF", "#00FF2F", "#FFB5B5",
+    "#FF00C3", "#686DFA", "#65FFF0",
+    "#E7FF5D", "#FF8000", "#0048FF",
+    "#2FFFAC", "#FF0000", "#AE00FF",
+    ]
+
 def create_progress_graph(projects):
-    import plotly.express as px  # 이미 import 되어 있다면 생략 가능
     # Plotly 기본 색상 팔레트 사용
     color_palette = px.colors.qualitative.Plotly
-    
-    # 각 프로젝트 이름을 기준으로 색상을 할당 (일관된 색상 매핑)
+
+    # 프로젝트 이름 리스트와 고유 이름 목록 생성
     project_names = [p["name"] for p in projects]
-    colors = [color_palette[hash(name) % len(color_palette)] for name in project_names]
+    unique_names = sorted(set(project_names))
+    
+    # 고유한 프로젝트 이름에 대해 색상 매핑 사전 생성
+    color_mapping = {name: my_colors[i % len(my_colors)] for i, name in enumerate(unique_names)}
+    
+    # 각 프로젝트에 대해 매핑된 색상을 사용 (project_names 순서를 유지)
+    colors = [color_mapping[name] for name in project_names]
     
     fig = go.Figure()
     fig.add_trace(go.Bar(
@@ -23,7 +36,7 @@ def create_progress_graph(projects):
         text=[f"{p['progress']}%" for p in projects],
         textposition="outside",
         textfont=dict(family="Pretendard", size=30, color="white"),
-        cliponaxis=False   # 텍스트가 잘리지 않도록 함
+        cliponaxis=False
     ))
         
     fig.update_layout(
@@ -39,7 +52,6 @@ def create_progress_graph(projects):
         plot_bgcolor="#2E2E3E"
     )
     
-    # x축 설정: 라벨이 실선 아래에 나오도록 하고, 폰트 지정
     fig.update_xaxes(
         side="bottom",
         linecolor="white",
@@ -53,9 +65,9 @@ def create_progress_graph(projects):
 def create_research_graphs(projects):
     research_graphs = []
     category_colors = {
-        "논문": "#FF6347",
-        "특허": "#4682B4",
-        "SW": "#FFD700"
+        "논문": "#ECECEC",
+        "특허": "#ACACAC",
+        "SW": "#757575"
     }
     
     for project in projects:
@@ -204,7 +216,7 @@ def create_milestone_graph(milestones_data):
                 "Milestone": "산사태", 
                 "담당자": "홍길동", 
                 "Start": (now + timedelta(days=5)).strftime("%Y-%m-%d"), 
-                "Finish": (now + timedelta(days=8)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=12)).strftime("%Y-%m-%d"), 
                 "Status": "달성", 
                 "세부 목표": "특허 등록"
             },
@@ -212,7 +224,7 @@ def create_milestone_graph(milestones_data):
                 "Milestone": "밀집", 
                 "담당자": "김연구", 
                 "Start": (now + timedelta(days=6)).strftime("%Y-%m-%d"), 
-                "Finish": (now + timedelta(days=36)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=16)).strftime("%Y-%m-%d"), 
                 "Status": "달성", 
                 "세부 목표": "논문 작성"
             },
@@ -228,15 +240,15 @@ def create_milestone_graph(milestones_data):
                 "Milestone": "위성", 
                 "담당자": "이연구", 
                 "Start": (now + timedelta(days=8)).strftime("%Y-%m-%d"), 
-                "Finish": (now + timedelta(days=38)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=13)).strftime("%Y-%m-%d"), 
                 "Status": "달성", 
                 "세부 목표": "특허 등록"
             },
             {
                 "Milestone": "로봇", 
                 "담당자": "이관훈", 
-                "Start": (now + timedelta(days=9)).strftime("%Y-%m-%d"), 
-                "Finish": (now + timedelta(days=19)).strftime("%Y-%m-%d"), 
+                "Start": (now + timedelta(days=2)).strftime("%Y-%m-%d"), 
+                "Finish": (now + timedelta(days=9)).strftime("%Y-%m-%d"), 
                 "Status": "달성", 
                 "세부 목표": "특허 등록"
             },
@@ -257,6 +269,10 @@ def create_milestone_graph(milestones_data):
     
     df["label"] = df["세부 목표"].astype(str) + " (" + df["담당자"].astype(str) + ")"
     
+    # 고유한 Milestone 이름 목록 생성
+    unique_milestones = sorted(set(df["Milestone"].unique()))
+    color_mapping = {name: my_colors[i % len(my_colors)] for i, name in enumerate(unique_milestones)}
+    
     fig = px.timeline(
         df,
         x_start="Start",
@@ -264,7 +280,7 @@ def create_milestone_graph(milestones_data):
         y="Milestone",
         color="Milestone",
         text="label",
-        color_discrete_sequence=px.colors.qualitative.Plotly
+        color_discrete_map=color_mapping  # 지정한 색상 매핑 사용
     )
     
     fig.update_yaxes(autorange="reversed")
@@ -287,26 +303,24 @@ def create_milestone_graph(milestones_data):
         margin=dict(l=40, r=20, t=40, b=40),
         showlegend=False
     )
+    
     fig.update_yaxes(
         tickmode="linear",
         dtick=1,
         showgrid=True,
         gridcolor="gray",
         gridwidth=1,
-        tickson="boundaries"  # tick과 grid line을 카테고리 경계에 배치
+        tickson="boundaries"
     )
-    # fig.update_yaxes(position=0.05)
-    # dcc.Graph에 overflowX를 hidden으로 추가
-
-    # y축 제목 제거
     fig.update_yaxes(title_text="")
     
-    # x, y축 tick 라벨 폰트 설정 (Pretendard, size 20)
-    fig.update_xaxes(tickfont=dict(family="Pretendard", size=20, color="white"),
-                     title_text="",
-                     side="bottom",
-                     linecolor="white",
-                     linewidth=2)
+    fig.update_xaxes(
+        tickfont=dict(family="Pretendard", size=20, color="white"),
+        title_text="",
+        side="bottom",
+        linecolor="white",
+        linewidth=2
+    )
     fig.update_yaxes(tickfont=dict(family="Pretendard", size=36, color="white"))
     
     return dcc.Graph(
