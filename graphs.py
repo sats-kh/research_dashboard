@@ -7,11 +7,11 @@ from dash import dcc, html
 import pandas as pd
 
 my_colors = [
-    "#2DB9FF", "#D4FF00", "#FFC300",
-    "#ECFF81", "#00FF2F", "#FFB5B5",
-    "#FF00C3", "#686DFA", "#65FFF0",
-    "#E7FF5D", "#FF8000", "#0048FF",
-    "#2FFFAC", "#FF0000", "#AE00FF",
+    "#2DB9FF", "#686DFA",  "#FFC300",
+    "#FF00C3", "#FF0000", "#AE00FF",    
+    "#ECFF81", "#FFB5B5", "#2FFFAC",
+    "#65FFF0", "#D4FF00", "#E7FF5D",
+    "#FF8000", "#0048FF", "#00FF2F",
     ]
 
 def create_progress_graph(projects):
@@ -289,7 +289,7 @@ def create_milestone_graph(milestones_data):
         trace.update(textposition='inside', textfont=dict(color='white', size=80))
     
     now = datetime.now()
-    two_weeks_later = now + timedelta(days=14)
+    two_weeks_later = now + timedelta(days=21)
     fig.update_layout(xaxis_range=[now, two_weeks_later])
     
     fig.update_layout(
