@@ -49,39 +49,6 @@ def create_progress_graph(projects):
     fig.update_yaxes(tickfont=dict(family="Pretendard", size=20, color="white"))
     
     return fig  # Figure 객체 반환
-    
-def create_budget_graph(projects):
-    fig = go.Figure()
-    for idx, p in enumerate(projects):
-        fig.add_trace(go.Indicator(
-            mode="gauge+number",
-            value=p["current_expenditure"],
-            title={"text": f"{p['name']}"},
-            gauge={
-                "axis": {
-                    "range": [0, p["total_cost"]],
-                    "ticks": "",       # 틱 마크 제거
-                    "ticklen": 0       # 틱 길이 0으로 설정
-                },
-                "bar": {"color": "#FFD700"}
-            },
-            domain={"row": 0, "column": idx}
-        ))
-    fig.update_layout(
-        title=dict(
-            text="과제비 집행률(단위: 백만원)",
-            x=0.5,
-            xanchor="center",
-            font=dict(family="Arial Bold", size=20, color="white")
-        ),
-        template="plotly_dark",
-        grid={"rows": 1, "columns": len(projects)},
-        height=300,
-        margin=dict(l=40, r=20, t=40, b=40),
-        paper_bgcolor="#2E2E3E",
-        plot_bgcolor="#2E2E3E"
-    )
-    return fig  # Figure 객체 반환
 
 def create_research_graphs(projects):
     research_graphs = []
@@ -151,7 +118,7 @@ def create_research_graphs(projects):
                 dict(
                     text=project_name,
                     x=0.5,
-                    y=-0.15,
+                    y=-0.20,
                     xref="paper",
                     yref="paper",
                     showarrow=False,
@@ -351,3 +318,36 @@ def create_milestone_graph(milestones_data):
             "overflowX": "hidden"
         }
     )
+    
+def create_budget_graph(projects):
+    fig = go.Figure()
+    for idx, p in enumerate(projects):
+        fig.add_trace(go.Indicator(
+            mode="gauge+number",
+            value=p["current_expenditure"],
+            title={"text": f"{p['name']}"},
+            gauge={
+                "axis": {
+                    "range": [0, p["total_cost"]],
+                    "ticks": "",       # 틱 마크 제거
+                    "ticklen": 0       # 틱 길이 0으로 설정
+                },
+                "bar": {"color": "#FFD700"}
+            },
+            domain={"row": 0, "column": idx}
+        ))
+    fig.update_layout(
+        title=dict(
+            text="과제비 집행률(단위: 백만원)",
+            x=0.5,
+            xanchor="center",
+            font=dict(family="Arial Bold", size=20, color="white")
+        ),
+        template="plotly_dark",
+        grid={"rows": 1, "columns": len(projects)},
+        height=300,
+        margin=dict(l=40, r=20, t=40, b=40),
+        paper_bgcolor="#2E2E3E",
+        plot_bgcolor="#2E2E3E"
+    )
+    return fig  # Figure 객체 반환

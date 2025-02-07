@@ -19,6 +19,31 @@ def init_dashboard(flask_app):
         routes_pathname_prefix='/dashboard/',
         external_stylesheets=external_stylesheets
     )
+    
+    dash_app.index_string = '''
+    <!DOCTYPE html>
+    <html>
+        <head>
+            {%metas%}
+            <title>{%title%}</title>
+            {%favicon%}
+            {%css%}
+            <style>
+                body {
+                    background-color: #1E1E2E;
+                }
+            </style>
+        </head>
+        <body>
+            {%app_entry%}
+            <footer>
+                {%config%}
+                {%scripts%}
+                {%renderer%}
+            </footer>
+        </body>
+    </html>
+    '''
 
     def serve_layout():
         # DB에서 최신 데이터를 불러오고 진행률 계산
@@ -168,6 +193,8 @@ def init_dashboard(flask_app):
                                         "color": "white",
                                         "marginBottom": "10px",
                                         "marginTop": "0px",
+                                        "fontWeight": "bold",      # 볼드체 적용
+                                        "paddingLeft": "25px"                                         
                                     }
                                 ),
                                 html.Div(
@@ -195,6 +222,8 @@ def init_dashboard(flask_app):
                                         "color": "white",
                                         "marginBottom": "10px",
                                         "marginTop": "0px",
+                                        "fontWeight": "bold",      # 볼드체 적용
+                                        "paddingLeft": "25px"                                                                      
                                     }
                                 ),
                                 html.Div(
@@ -230,7 +259,9 @@ def init_dashboard(flask_app):
                                 "fontSize": "40px",
                                 "color": "white",
                                 "marginBottom": "10px",
-                                "marginTop": "0px"
+                                "marginTop": "0px",
+                                "fontWeight": "bold",      # 볼드체 적용
+                                "paddingLeft": "25px"                                         
                             }
                         ),
                         html.Div(
