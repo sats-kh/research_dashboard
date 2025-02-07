@@ -5,6 +5,7 @@ import plotly.express as px
 from datetime import datetime, timedelta
 from dash import dcc, html
 import pandas as pd
+
 def create_progress_graph(projects):
     import plotly.express as px  # 이미 import 되어 있다면 생략 가능
     # Plotly 기본 색상 팔레트 사용
@@ -22,19 +23,27 @@ def create_progress_graph(projects):
         text=[f"{p['progress']}%" for p in projects],
         textposition="outside"
     ))
+    
     fig.update_layout(
         title=dict(
-            text="연구과제 진행률(기간)",
             x=0.5,
             xanchor="center",
-            font=dict(family="Arial Bold", size=20, color="white")
+            font=dict(family="Pretendard", size=20, color="white")
         ),
         template="plotly_dark",
-        height=300,
+        height=400,
         margin=dict(l=40, r=20, t=40, b=40),
         paper_bgcolor="#2E2E3E",
         plot_bgcolor="#2E2E3E"
     )
+    
+    # x축 라벨이 실선 아래에 나오도록 설정하고, x축 실선의 두께와 색상을 지정
+    fig.update_xaxes(
+        side="bottom",
+        linecolor="white",
+        linewidth=2  # 원하는 두께 값으로 조정
+    )
+    
     return fig  # Figure 객체 반환
     
 def create_budget_graph(projects):
@@ -108,33 +117,56 @@ def create_research_graphs(projects):
                 marker=dict(color="#CCCCCC")
             )
         ])
+        
         fig.update_layout(
-            title=dict(
-                text=f"{project_name}",
-                x=0.5,
-                xanchor="center",
-                font=dict(family="Arial Bold", size=20, color="white")
-            ),
             template="plotly_dark",
             barmode="stack",
-            height=300,
+            height=400,
             margin=dict(l=40, r=20, t=40, b=40),
             showlegend=False,
-            paper_bgcolor="#2E2E3E",
-            plot_bgcolor="#2E2E3E"
+            paper_bgcolor="#3C3C49",
+            plot_bgcolor="#3C3C49"
         )
+        
+        fig.update_xaxes(
+            showticklabels=False,
+            linecolor="white",
+            linewidth=2,
+            side="bottom"
+        )
+        
+        # y축 tick을 정수 단위로 표시
+        fig.update_yaxes(tickmode="linear", dtick=1)
+        
+        # x축 아래쪽에 제목(annotation) 배치
+        fig.update_layout(
+            margin=dict(l=40, r=20, t=40, b=70),
+            annotations=[
+                dict(
+                    text=project_name,
+                    x=0.5,
+                    y=-0.15,
+                    xref="paper",
+                    yref="paper",
+                    showarrow=False,
+                    font=dict(family="Pretendard", size=20, color="white")
+                )
+            ]
+        )
+        
         research_graphs.append(fig)
     
-    # 각 Figure 객체들을 dcc.Graph로 감싸고 좌우 배치
+    # 각 Figure 객체들을 dcc.Graph로 감싸고, 둥근 모서리를 적용하는 div로 감싸기
     graph_components = [
-        dcc.Graph(
-            figure=f,
+        html.Div(
+            children=dcc.Graph(figure=f, style={"width": "100%"}),
             style={
-                "height": "300px",
-                "flex": "1",
                 "width": "100%",
-                "borderRadius": "8px",
-                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)"
+                "borderRadius": "30px",
+                "overflow": "hidden",  # 자식 요소를 둥근 모서리에 맞게 자름
+                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                # 여기서는 개별 카드의 높이를 고정하지 않고 내용에 맞춰 auto로 설정
+                "height": "auto"
             }
         )
         for f in research_graphs
@@ -145,7 +177,7 @@ def create_research_graphs(projects):
         style={
             "display": "flex",
             "flexDirection": "row",
-            "gap": "20px",
+            "gap": "30px",  # 30px로 변경
             "overflowX": "auto"
         }
     )

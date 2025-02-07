@@ -67,6 +67,7 @@ def init_dashboard(flask_app):
                     "재난안전융합연구센터 연구과제 대시보드",
                     style={
                         "textAlign": "center",
+                        "fontSize": "60px",
                         "marginTop": "40px",
                         "fontFamily": "'Pretendard', sans-serif"
                     }
@@ -84,62 +85,69 @@ def init_dashboard(flask_app):
                         html.Div(
                             style={
                                 "backgroundColor": "#2E2E3E",
-                                "padding": "15px",
-                                "borderRadius": "8px",
+                                "borderRadius": "30px",
                                 "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                 "textAlign": "center",
                                 "fontFamily": "'Pretendard', sans-serif"
                             },
                             children=[
-                                html.H3("총 연구과제", style={"fontFamily": "'Pretendard', sans-serif"}),
-                                html.H2(f"{total_projects} 개", style={"fontFamily": "'Pretendard', sans-serif"})
+                                html.P("총 연구과제", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "36px", "marginBottom": "0px"}),
+                                html.H2(f"{total_projects} 개", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "120px","marginTop": "4px", "marginBottom": "30px"})
                             ]
                         ),
                         html.Div(
                             style={
                                 "backgroundColor": "#2E2E3E",
-                                "padding": "15px",
-                                "borderRadius": "8px",
+                                "borderRadius": "30px",
                                 "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                 "textAlign": "center",
                                 "fontFamily": "'Pretendard', sans-serif"
                             },
                             children=[
-                                html.H3("평균 진행률", style={"fontFamily": "'Pretendard', sans-serif"}),
-                                html.H2(f"{avg_progress:.1f}%", style={"fontFamily": "'Pretendard', sans-serif"})
+                                html.P("평균 진행률", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "36px", "marginBottom": "0px"}),
+                                html.H2(f"{avg_progress:.1f}%", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "120px","marginTop": "4px", "marginBottom": "30px"})
                             ]
                         ),
                         html.Div(
                             style={
                                 "backgroundColor": "#2E2E3E",
-                                "padding": "15px",
-                                "borderRadius": "8px",
+                                "borderRadius": "30px",
                                 "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                 "textAlign": "center",
                                 "fontFamily": "'Pretendard', sans-serif"
                             },
                             children=[
-                                html.H3("총 예산", style={"fontFamily": "'Pretendard', sans-serif"}),
-                                html.H2(f"{total_budget} 백만원", style={"fontFamily": "'Pretendard', sans-serif"})
+                                html.P("총 예산", style={"fontFamily": "'Pretendard', sans-serif",  "fontSize": "36px", "marginBottom": "0px"}),
+                                html.H2(
+                                        children=[
+                                            html.Span(f"{total_budget}", style={"fontSize": "120px"}),
+                                            html.Span(" 백만원", style={"fontSize": "48px",})
+                                        ],
+                                        style={
+                                            "fontFamily": "'Pretendard', sans-serif",
+                                            "marginTop": "4px",
+                                            "marginBottom": "20px"
+                                        }
+                                    )
+                                # html.H2(f"{total_budget} 백만원", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "120px","marginTop": "4px", "marginBottom": "30px"})
                             ]
                         ),
                         html.Div(
                             style={
                                 "backgroundColor": "#2E2E3E",
-                                "padding": "15px",
-                                "borderRadius": "8px",
+                                "borderRadius": "30px",
                                 "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                 "textAlign": "center",
                                 "fontFamily": "'Pretendard', sans-serif"
                             },
                             children=[
-                                html.H3("참여 인원", style={"fontFamily": "'Pretendard', sans-serif"}),
-                                html.H2("X 명", style={"fontFamily": "'Pretendard', sans-serif"})
+                                html.P("전체 참여 인원", style={"fontFamily": "'Pretendard', sans-serif",  "fontSize": "36px", "marginBottom": "0px"}),
+                                html.H2("15", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "120px","marginTop": "4px", "marginBottom": "30px"})
                             ]
                         )
                     ]
                 ),
-                # 그래프 배치 (2개의 동일한 컬럼)
+                # 그래프
                 html.Div(
                     style={
                         "display": "grid",
@@ -148,8 +156,60 @@ def init_dashboard(flask_app):
                         "fontFamily": "'Pretendard', sans-serif"
                     },
                     children=[
-                        dcc.Graph(figure=progress_graph, style={"width": "100%"}),
-                        html.Div(children=research_graphs, style={"width": "100%"})
+                        # 첫 번째 셀: "연구과제 진행률" 라벨과 progress_graph를 포함하는 카드
+                        html.Div(
+                            children=[
+                                html.P(
+                                    "연구과제 진행률",
+                                    style={
+                                        "textAlign": "left",
+                                        "fontFamily": "'Pretendard', sans-serif",
+                                        "fontSize": "40px",
+                                        "color": "white",
+                                        "marginBottom": "20px",
+                                        "marginTop": "0px",
+                                    }
+                                ),
+                                html.Div(
+                                    children=dcc.Graph(figure=progress_graph, style={"width": "100%"}),
+                                    style={
+                                        "backgroundColor": "#2E2E3E",
+                                        "padding": "15px",
+                                        "borderRadius": "30px",
+                                        "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                        "textAlign": "center",
+                                        "fontFamily": "'Pretendard', sans-serif",
+                                    }
+                                )
+                            ]
+                        ),
+                        # 두 번째 셀: "정량 성과지표" 라벨과 research_graphs를 포함하는 카드
+                        html.Div(
+                            children=[
+                                html.P(
+                                    "정량 성과지표",
+                                    style={
+                                        "textAlign": "left",
+                                        "fontFamily": "'Pretendard', sans-serif",
+                                        "fontSize": "40px",
+                                        "color": "white",
+                                        "marginBottom": "20px",
+                                        "marginTop": "0px",
+                                    }
+                                ),
+                                html.Div(
+                                    children=html.Div(children=research_graphs, style={"width": "100%"}),
+                                    style={
+                                        "backgroundColor": "#2E2E3E",
+                                        "padding": "15px",
+                                        "borderRadius": "30px",                                        
+                                        "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                        "textAlign": "center",
+                                        "fontFamily": "'Pretendard', sans-serif",
+                                    }
+                                )
+                            ]
+                        )
                     ]
                 ),
                 # 마일스톤 그래프 영역 (단일 컬럼, 상단 여백 추가)
