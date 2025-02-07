@@ -267,7 +267,8 @@ def create_milestone_graph(milestones_data):
     if "담당자" not in df.columns:
         df["담당자"] = ""
     
-    df["label"] = df["세부 목표"].astype(str) + " (" + df["담당자"].astype(str) + ")"
+    # df["label"] = df["세부 목표"].astype(str) + " (" + df["담당자"].astype(str) + ")"
+    df["label"] = df["세부 목표"].astype(str)
     
     # 고유한 Milestone 이름 목록 생성
     unique_milestones = sorted(set(df["Milestone"].unique()))
@@ -286,7 +287,7 @@ def create_milestone_graph(milestones_data):
     fig.update_yaxes(autorange="reversed")
     
     for trace in fig.data:
-        trace.update(textposition='inside', textfont=dict(color='white', size=80))
+        trace.update(textposition='inside', textfont=dict(color='white', size=36))
     
     now = datetime.now()
     two_weeks_later = now + timedelta(days=21)
@@ -308,7 +309,7 @@ def create_milestone_graph(milestones_data):
         tickmode="linear",
         dtick=1,
         showgrid=True,
-        gridcolor="gray",
+        gridcolor="#545464",
         gridwidth=1,
         tickson="boundaries"
     )

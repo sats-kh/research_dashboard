@@ -246,7 +246,7 @@ def init_dashboard(flask_app):
                     style={
                         "display": "grid",
                         "gridTemplateColumns": "1fr",
-                        "marginTop": "40px",
+                        "marginTop": "25px",
                         "fontFamily": "'Pretendard', sans-serif",
                         "overflowX": "hidden"  # 부모 Div에 overflow 설정 추가
                     },
