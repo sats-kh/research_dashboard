@@ -21,9 +21,11 @@ def create_progress_graph(projects):
         y=[p["progress"] for p in projects],
         marker=dict(color=colors, opacity=0.8),
         text=[f"{p['progress']}%" for p in projects],
-        textposition="outside"
+        textposition="outside",
+        textfont=dict(family="Pretendard", size=30, color="white"),
+        cliponaxis=False   # 텍스트가 잘리지 않도록 함
     ))
-    
+        
     fig.update_layout(
         title=dict(
             x=0.5,
@@ -37,12 +39,14 @@ def create_progress_graph(projects):
         plot_bgcolor="#2E2E3E"
     )
     
-    # x축 라벨이 실선 아래에 나오도록 설정하고, x축 실선의 두께와 색상을 지정
+    # x축 설정: 라벨이 실선 아래에 나오도록 하고, 폰트 지정
     fig.update_xaxes(
         side="bottom",
         linecolor="white",
-        linewidth=2  # 원하는 두께 값으로 조정
+        linewidth=2,
+        tickfont=dict(family="Pretendard", size=36, color="white")
     )
+    fig.update_yaxes(tickfont=dict(family="Pretendard", size=20, color="white"))
     
     return fig  # Figure 객체 반환
     
@@ -114,7 +118,7 @@ def create_research_graphs(projects):
                 name="남은 목표",
                 x=categories,
                 y=remaining_values,
-                marker=dict(color="#CCCCCC")
+                marker=dict(color="#3C3C49")
             )
         ])
         
@@ -124,8 +128,10 @@ def create_research_graphs(projects):
             height=400,
             margin=dict(l=40, r=20, t=40, b=40),
             showlegend=False,
-            paper_bgcolor="#3C3C49",
-            plot_bgcolor="#3C3C49"
+            paper_bgcolor="#2E2E3E",
+            plot_bgcolor="#2E2E3E"
+            # paper_bgcolor="#3C3C49",
+            # plot_bgcolor="#3C3C49"
         )
         
         fig.update_xaxes(
@@ -136,8 +142,8 @@ def create_research_graphs(projects):
         )
         
         # y축 tick을 정수 단위로 표시
-        fig.update_yaxes(tickmode="linear", dtick=1)
-        
+        fig.update_yaxes(tickmode="linear", dtick=1,tickfont=dict(family="Pretendard", size=20, color="white"))
+
         # x축 아래쪽에 제목(annotation) 배치
         fig.update_layout(
             margin=dict(l=40, r=20, t=40, b=70),
@@ -149,7 +155,7 @@ def create_research_graphs(projects):
                     xref="paper",
                     yref="paper",
                     showarrow=False,
-                    font=dict(family="Pretendard", size=20, color="white")
+                    font=dict(family="Pretendard", size=36, color="white")
                 )
             ]
         )
@@ -164,7 +170,7 @@ def create_research_graphs(projects):
                 "width": "100%",
                 "borderRadius": "30px",
                 "overflow": "hidden",  # 자식 요소를 둥근 모서리에 맞게 자름
-                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                # "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                 # 여기서는 개별 카드의 높이를 고정하지 않고 내용에 맞춰 auto로 설정
                 "height": "auto"
             }
@@ -300,7 +306,7 @@ def create_milestone_graph(milestones_data):
         trace.update(textposition='inside', textfont=dict(color='white', size=80))
     
     now = datetime.now()
-    two_weeks_later = now + timedelta(days=7)
+    two_weeks_later = now + timedelta(days=14)
     fig.update_layout(xaxis_range=[now, two_weeks_later])
     
     fig.update_layout(
@@ -322,7 +328,7 @@ def create_milestone_graph(milestones_data):
         gridwidth=1,
         tickson="boundaries"  # tick과 grid line을 카테고리 경계에 배치
     )
-    fig.update_yaxes(position=0.05)
+    # fig.update_yaxes(position=0.05)
     # dcc.Graph에 overflowX를 hidden으로 추가
 
     # y축 제목 제거
@@ -334,7 +340,7 @@ def create_milestone_graph(milestones_data):
                      side="bottom",
                      linecolor="white",
                      linewidth=2)
-    fig.update_yaxes(tickfont=dict(family="Pretendard", size=20, color="white"))
+    fig.update_yaxes(tickfont=dict(family="Pretendard", size=36, color="white"))
     
     return dcc.Graph(
         figure=fig,

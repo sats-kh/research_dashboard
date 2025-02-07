@@ -86,12 +86,12 @@ def init_dashboard(flask_app):
                             style={
                                 "backgroundColor": "#2E2E3E",
                                 "borderRadius": "30px",
-                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                # "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                 "textAlign": "center",
                                 "fontFamily": "'Pretendard', sans-serif"
                             },
                             children=[
-                                html.P("총 연구과제", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "36px", "marginBottom": "0px"}),
+                                html.P("총 연구과제", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "36px", "marginBottom": "0px", "color":"#ACACAC"}),
                                 html.H2(f"{total_projects} 개", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "120px","marginTop": "4px", "marginBottom": "30px"})
                             ]
                         ),
@@ -99,12 +99,12 @@ def init_dashboard(flask_app):
                             style={
                                 "backgroundColor": "#2E2E3E",
                                 "borderRadius": "30px",
-                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                # "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                 "textAlign": "center",
                                 "fontFamily": "'Pretendard', sans-serif"
                             },
                             children=[
-                                html.P("평균 진행률", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "36px", "marginBottom": "0px"}),
+                                html.P("평균 진행률", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "36px", "marginBottom": "0px", "color":"#ACACAC"}),
                                 html.H2(f"{avg_progress:.1f}%", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "120px","marginTop": "4px", "marginBottom": "30px"})
                             ]
                         ),
@@ -112,12 +112,12 @@ def init_dashboard(flask_app):
                             style={
                                 "backgroundColor": "#2E2E3E",
                                 "borderRadius": "30px",
-                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                # "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                 "textAlign": "center",
                                 "fontFamily": "'Pretendard', sans-serif"
                             },
                             children=[
-                                html.P("총 예산", style={"fontFamily": "'Pretendard', sans-serif",  "fontSize": "36px", "marginBottom": "0px"}),
+                                html.P("총 예산", style={"fontFamily": "'Pretendard', sans-serif",  "fontSize": "36px", "marginBottom": "0px", "color":"#ACACAC"}),
                                 html.H2(
                                         children=[
                                             html.Span(f"{total_budget}", style={"fontSize": "120px"}),
@@ -136,12 +136,12 @@ def init_dashboard(flask_app):
                             style={
                                 "backgroundColor": "#2E2E3E",
                                 "borderRadius": "30px",
-                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                # "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                 "textAlign": "center",
                                 "fontFamily": "'Pretendard', sans-serif"
                             },
                             children=[
-                                html.P("전체 참여 인원", style={"fontFamily": "'Pretendard', sans-serif",  "fontSize": "36px", "marginBottom": "0px"}),
+                                html.P("전체 참여 인원", style={"fontFamily": "'Pretendard', sans-serif",  "fontSize": "36px", "marginBottom": "0px", "color":"#ACACAC"}),
                                 html.H2("15", style={"fontFamily": "'Pretendard', sans-serif", "fontSize": "120px","marginTop": "4px", "marginBottom": "30px"})
                             ]
                         )
@@ -176,7 +176,7 @@ def init_dashboard(flask_app):
                                         "backgroundColor": "#2E2E3E",
                                         "padding": "15px",
                                         "borderRadius": "30px",
-                                        "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                        # "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                         "textAlign": "center",
                                         "fontFamily": "'Pretendard', sans-serif",
                                     }
@@ -203,7 +203,7 @@ def init_dashboard(flask_app):
                                         "backgroundColor": "#2E2E3E",
                                         "padding": "15px",
                                         "borderRadius": "30px",                                        
-                                        "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                        # "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                         "textAlign": "center",
                                         "fontFamily": "'Pretendard', sans-serif",
                                     }
@@ -217,7 +217,6 @@ def init_dashboard(flask_app):
                     style={
                         "display": "grid",
                         "gridTemplateColumns": "1fr",
-                        "gap": "20px",
                         "marginTop": "40px",
                         "fontFamily": "'Pretendard', sans-serif",
                         "overflowX": "hidden"  # 부모 Div에 overflow 설정 추가
@@ -240,11 +239,11 @@ def init_dashboard(flask_app):
                                 "backgroundColor": "#2E2E3E",
                                 "padding": "15px",
                                 "borderRadius": "30px",
-                                "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
+                                # "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
                                 "textAlign": "center",
                                 "fontFamily": "'Pretendard', sans-serif",
                                 "width": "100%",
-                                "height": "960px",
+                                "height": "1080px",
                                 "overflowX": "hidden"  # 여기에도 overflow 설정 추가
                             }
                         )
