@@ -47,7 +47,6 @@
   <!-- 새 연구과제 추가 -->
   <div class="card mb-4" style="background-color:#2e333e; border-radius:8px; box-shadow:2px 2px 8px rgba(0,0,0,0.5);">
     <div class="card-body">
-    </hr>
       <h4 class="card-title text-center text-white mb-4">새 연구과제 추가</h4>
       <form method="post">
         <input type="hidden" name="action" value="add">
@@ -55,11 +54,11 @@
         <!-- 기본 정보 -->
         <div class="mb-3">
           <label for="name" class="form-label text-white">프로젝트명</label>
-          <input type="text" class="form-control" name="name" id="name" placeholder="프로젝트명을 입력하세요">
+          <input type="text" class="form-control" name="name" id="name" placeholder="프로젝트명을 입력하세요" required>
         </div>
         <div class="mb-3">
           <label for="manager" class="form-label text-white">담당자</label>
-          <input type="text" class="form-control" name="manager" id="manager" placeholder="담당자를 입력하세요">
+          <input type="text" class="form-control" name="manager" id="manager" placeholder="담당자를 입력하세요" required>
         </div>
         
         <hr class="form-divider">
@@ -68,11 +67,11 @@
         <div class="row g-2">
           <div class="col-md-6 mb-3">
             <label for="start_date" class="form-label text-white">시작일</label>
-            <input type="date" class="form-control" name="start_date" id="start_date">
+            <input type="date" class="form-control" name="start_date" id="start_date" required>
           </div>
           <div class="col-md-6 mb-3">
             <label for="end_date" class="form-label text-white">마감일</label>
-            <input type="date" class="form-control" name="end_date" id="end_date">
+            <input type="date" class="form-control" name="end_date" id="end_date" required>
           </div>
         </div>
         
@@ -82,11 +81,11 @@
         <div class="row g-2">
           <div class="col-md-6 mb-3">
             <label for="total_cost" class="form-label text-white">총 예산(단위: 백만원)</label>
-            <input type="number" class="form-control" name="total_cost" id="total_cost">
+            <input type="number" class="form-control" name="total_cost" id="total_cost" required>
           </div>
           <div class="col-md-6 mb-3">
             <label for="current_expenditure" class="form-label text-white">현재 소진 금액(단위: 백만원)</label>
-            <input type="number" class="form-control" name="current_expenditure" id="current_expenditure">
+            <input type="number" class="form-control" name="current_expenditure" id="current_expenditure" required>
           </div>
         </div>
         
@@ -95,12 +94,12 @@
         <!-- 논문 관련 -->
         <div class="row g-2">
           <div class="col-md-6 mb-3">
-            <label for="goal_papers" class="form-label text-white">논문 목표 개수</label>
-            <input type="number" class="form-control" name="goal_papers" id="goal_papers">
+            <label for="goal_papers" class="form-label text-white">논문 목표</label>
+            <input type="number" class="form-control" name="goal_papers" id="goal_papers" required>
           </div>
           <div class="col-md-6 mb-3">
             <label for="current_papers" class="form-label text-white">논문 결과</label>
-            <input type="number" class="form-control" name="current_papers" id="current_papers">
+            <input type="number" class="form-control" name="current_papers" id="current_papers" required>
           </div>
         </div>
         
@@ -110,22 +109,21 @@
         <div class="row g-2">
           <div class="col-md-6 mb-3">
             <label for="goal_patents_filed" class="form-label text-white">특허(출원) 목표</label>
-            <input type="number" class="form-control" name="goal_patents_filed" id="goal_patents_filed">
+            <input type="number" class="form-control" name="goal_patents_filed" id="goal_patents_filed" required>
           </div>
           <div class="col-md-6 mb-3">
             <label for="current_patents_filed" class="form-label text-white">특허(출원) 결과</label>
-            <input type="number" class="form-control" name="current_patents_filed" id="current_patents_filed">
+            <input type="number" class="form-control" name="current_patents_filed" id="current_patents_filed" required>
           </div>
-
         </div>
         <div class="row g-2">
           <div class="col-md-6 mb-3">
             <label for="goal_patents_registered" class="form-label text-white">특허(등록) 목표</label>
-            <input type="number" class="form-control" name="goal_patents_registered" id="goal_patents_registered">
+            <input type="number" class="form-control" name="goal_patents_registered" id="goal_patents_registered" required>
           </div>
           <div class="col-md-6 mb-3">
             <label for="current_patents_registered" class="form-label text-white">특허(등록) 결과</label>
-            <input type="number" class="form-control" name="current_patents_registered" id="current_patents_registered">
+            <input type="number" class="form-control" name="current_patents_registered" id="current_patents_registered" required>
           </div>
         </div>
         
@@ -135,16 +133,16 @@
         <div class="row g-2">
           <div class="col-md-6">
             <label for="goal_software" class="form-label text-white">SW 목표</label>
-            <input type="number" class="form-control" name="goal_software" id="goal_software">
+            <input type="number" class="form-control" name="goal_software" id="goal_software" required>
           </div>
           <div class="col-md-6">
             <label for="current_software" class="form-label text-white">SW 결과</label>
-            <input type="number" class="form-control" name="current_software" id="current_software">
+            <input type="number" class="form-control" name="current_software" id="current_software" required>
           </div>
         </div>
         
         <div class="d-flex justify-content-end">
-          <!-- 확인 창 추가: '추가하시겠습니까?' -->
+          <!-- 확인 창 추가: '새 연구과제를 추가하시겠습니까?' -->
           <button type="submit" class="btn btn-primary" onclick="return confirm('새 연구과제를 추가하시겠습니까?')">새 연구과제 추가</button>
         </div>
       </form>
@@ -161,19 +159,19 @@
         <div class="row g-2 align-items-center">
           <div class="col-md-3">
             <label class="form-label">프로젝트명</label>
-            <input type="text" name="name" value="{{ project.name }}" class="form-control">
+            <input type="text" name="name" value="{{ project.name }}" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">담당자</label>
-            <input type="text" name="manager" value="{{ project.manager }}" class="form-control">
+            <input type="text" name="manager" value="{{ project.manager }}" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">시작일</label>
-            <input type="date" name="start_date" value="{{ project.start_date }}" class="form-control">
+            <input type="date" name="start_date" value="{{ project.start_date }}" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">마감일</label>
-            <input type="date" name="end_date" value="{{ project.end_date }}" class="form-control">
+            <input type="date" name="end_date" value="{{ project.end_date }}" class="form-control" required>
           </div>
         </div>
         
@@ -183,19 +181,19 @@
         <div class="row g-2 mt-2">
           <div class="col-md-3">
             <label class="form-label">총 예산(단위: 백만원)</label>
-            <input type="number" name="total_cost" value="{{ project.total_cost }}" class="form-control">
+            <input type="number" name="total_cost" value="{{ project.total_cost }}" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">소진 금액(단위: 백만원)</label>
-            <input type="number" name="current_expenditure" value="{{ project.current_expenditure }}" class="form-control">
+            <input type="number" name="current_expenditure" value="{{ project.current_expenditure }}" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">논문 목표</label>
-            <input type="number" name="goal_papers" value="{{ project.goal_papers }}" class="form-control">
+            <input type="number" name="goal_papers" value="{{ project.goal_papers }}" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">논문 결과</label>
-            <input type="number" name="current_papers" value="{{ project.current_papers }}" class="form-control">
+            <input type="number" name="current_papers" value="{{ project.current_papers }}" class="form-control" required>
           </div>
         </div>
         
@@ -205,19 +203,19 @@
         <div class="row g-2 mt-2">
           <div class="col-md-3">
             <label class="form-label">특허(출원) 목표</label>
-            <input type="number" name="goal_patents_filed" value="{{ project.goal_patents_filed }}" class="form-control">
+            <input type="number" name="goal_patents_filed" value="{{ project.goal_patents_filed }}" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">특허(출원) 결과</label>
-            <input type="number" name="current_patents_filed" value="{{ project.current_patents_filed }}" class="form-control">
+            <input type="number" name="current_patents_filed" value="{{ project.current_patents_filed }}" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">특허(등록) 목표</label>
-            <input type="number" name="goal_patents_registered" value="{{ project.goal_patents_registered }}" class="form-control">
+            <input type="number" name="goal_patents_registered" value="{{ project.goal_patents_registered }}" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">특허(등록) 결과</label>
-            <input type="number" name="current_patents_registered" value="{{ project.current_patents_registered }}" class="form-control">
+            <input type="number" name="current_patents_registered" value="{{ project.current_patents_registered }}" class="form-control" required>
           </div>
         </div>
         
@@ -227,11 +225,11 @@
         <div class="row g-2 mt-2">
           <div class="col-md-6">
             <label class="form-label">SW 목표</label>
-            <input type="number" name="goal_software" value="{{ project.goal_software }}" class="form-control">
+            <input type="number" name="goal_software" value="{{ project.goal_software }}" class="form-control" required>
           </div>
           <div class="col-md-6">
             <label class="form-label">SW 결과</label>
-            <input type="number" name="current_software" value="{{ project.current_software }}" class="form-control">
+            <input type="number" name="current_software" value="{{ project.current_software }}" class="form-control" required>
           </div>
         </div>
         

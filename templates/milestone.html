@@ -45,7 +45,7 @@
       <!-- action hidden 필드는 없어도 submit 버튼의 name/value로 전송됨 -->
       <div class="mb-3">
         <label for="newMilestone" class="form-label">마일스톤 (연구과제)</label>
-        <select name="Milestone" id="newMilestone" class="form-select">
+        <select name="Milestone" id="newMilestone" class="form-select" required>
           {% for project in projects %}
             <option value="{{ project.name }}">{{ project.name }}</option>
           {% endfor %}
@@ -54,20 +54,20 @@
       <!-- 담당자 입력 필드 추가 -->
       <div class="mb-3">
         <label for="newManager" class="form-label">담당자</label>
-        <input type="text" name="담당자" id="newManager" class="form-control" placeholder="담당자 이름을 입력하세요">
+        <input type="text" name="담당자" id="newManager" class="form-control" placeholder="담당자 이름을 입력하세요" required>
       </div>
       <div class="row g-2">
         <div class="col-md-4 mb-3">
           <label for="newStart" class="form-label">시작일</label>
-          <input type="date" name="Start" id="newStart" class="form-control">
+          <input type="date" name="Start" id="newStart" class="form-control" required>
         </div>
         <div class="col-md-4 mb-3">
           <label for="newFinish" class="form-label">종료일</label>
-          <input type="date" name="Finish" id="newFinish" class="form-control">
+          <input type="date" name="Finish" id="newFinish" class="form-control" required>
         </div>
         <div class="col-md-4 mb-3">
           <label for="newStatus" class="form-label">상태</label>
-          <select name="Status" id="newStatus" class="form-select">
+          <select name="Status" id="newStatus" class="form-select" required>
             <option value="달성">달성</option>
             <option value="미달성">미달성</option>
           </select>
@@ -75,10 +75,10 @@
       </div>
       <div class="mb-3">
         <label for="newDetail" class="form-label">세부 목표</label>
-        <input type="text" name="세부 목표" id="newDetail" class="form-control" placeholder="세부 목표 내용을 입력하세요">
+        <input type="text" name="세부 목표" id="newDetail" class="form-control" placeholder="세부 목표 내용을 입력하세요" required>
       </div>
       <div class="d-flex justify-content-end">
-        <!-- 새 연구과제 추가 버튼에 확인 대화상자 추가 -->
+        <!-- 새 마일스톤 추가 버튼에 확인 대화상자 추가 -->
         <button type="submit" name="action" value="add" class="btn btn-primary" onclick="return confirm('새 마일스톤을 추가하시겠습니까?')">추가</button>
       </div>
     </form>
@@ -106,7 +106,7 @@
           <!-- id와 기존 값을 hidden 또는 입력 필드로 포함 -->
           <input type="hidden" name="id" value="{{ ms.id }}">
           <td>
-            <select name="Milestone" class="form-select">
+            <select name="Milestone" class="form-select" required>
               {% for project in projects %}
                 <option value="{{ project.name }}" {% if project.name == ms.Milestone %}selected{% endif %}>
                   {{ project.name }}
@@ -115,22 +115,22 @@
             </select>
           </td>
           <td>
-            <input type="text" name="담당자" value="{{ ms.담당자 }}" class="form-control" placeholder="담당자 입력">
+            <input type="text" name="담당자" value="{{ ms.담당자 }}" class="form-control" placeholder="담당자 입력" required>
           </td>
           <td>
-            <input type="date" name="Start" value="{{ ms.Start }}" class="form-control">
+            <input type="date" name="Start" value="{{ ms.Start }}" class="form-control" required>
           </td>
           <td>
-            <input type="date" name="Finish" value="{{ ms.Finish }}" class="form-control">
+            <input type="date" name="Finish" value="{{ ms.Finish }}" class="form-control" required>
           </td>
           <td>
-            <select name="Status" class="form-select">
-              <option value="미달성" {% if ms.Status == "미달성" %}selected{% endif %}>미달성</option>
+            <select name="Status" class="form-select" required>
+              <option value="미달성" {% if ms.Status != "달성" %}selected{% endif %}>미달성</option>
               <option value="달성" {% if ms.Status == "달성" %}selected{% endif %}>달성</option>
             </select>
           </td>
           <td>
-            <input type="text" name="세부 목표" value="{{ ms['세부 목표'] }}" class="form-control">
+            <input type="text" name="세부 목표" value="{{ ms['세부 목표'] }}" class="form-control" required>
           </td>
           <td>
             <!-- 수정 버튼에 확인 대화상자 추가 -->
