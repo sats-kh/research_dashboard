@@ -62,7 +62,7 @@
     <form method="post" class="milestone-form">
       <!-- action hidden 필드는 없어도 submit 버튼의 name/value로 전송됨 -->
       <div class="mb-3">
-        <label for="newMilestone" class="form-label text-white">마일스톤 (연구과제)</label>
+        <label for="newMilestone" class="form-label text-white">연구과제</label>
         <select name="Milestone" id="newMilestone" class="form-select" required>
           {% for project in projects %}
             <option value="{{ project.name }}">{{ project.name }}</option>
