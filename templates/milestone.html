@@ -11,10 +11,10 @@
     * {
       font-family: 'Pretendard', sans-serif;
     }
-    body {
+    /* body {
       background-color: #1E1E2E;
       color: white;
-    }
+    } */
     .table-dark th,
     .table-dark td {
       border-color: #2E2E3E;
@@ -33,18 +33,36 @@
       border-top: 1px solid #444;
       margin: 15px 0;
     }
+        /* 링크 스타일 */
+        .nav-links {
+      margin-bottom: 20px;
+    }
+    .nav-links a {
+      color:blue;
+      text-decoration: none;
+      font-size: 18px;
+      margin-right: 15px;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body class="container mt-4">
   <h2 class="text-center mb-4">마일스톤 관리</h2>
-  
+  <div class="mb-3">
+    <div class="nav-links">
+      <a href="/dashboard/">Dashboard 바로가기</a>
+      <a href="/update">연구과제 관리 바로가기</a>
+    </div>
+  </div>
   <!-- 새 마일스톤 추가 폼 -->
   <div class="card-custom">
-    <h4 class="text-center mb-4">새 마일스톤 추가</h4>
+    <h4 class="text-center mb-4 text-white">새 마일스톤 추가</h4>
     <form method="post" class="milestone-form">
       <!-- action hidden 필드는 없어도 submit 버튼의 name/value로 전송됨 -->
       <div class="mb-3">
-        <label for="newMilestone" class="form-label">마일스톤 (연구과제)</label>
+        <label for="newMilestone" class="form-label text-white">마일스톤 (연구과제)</label>
         <select name="Milestone" id="newMilestone" class="form-select" required>
           {% for project in projects %}
             <option value="{{ project.name }}">{{ project.name }}</option>
@@ -53,20 +71,20 @@
       </div>
       <!-- 담당자 입력 필드 추가 -->
       <div class="mb-3">
-        <label for="newManager" class="form-label">담당자</label>
+        <label for="newManager" class="form-label text-white">담당자</label>
         <input type="text" name="담당자" id="newManager" class="form-control" placeholder="담당자 이름을 입력하세요" required>
       </div>
       <div class="row g-2">
         <div class="col-md-4 mb-3">
-          <label for="newStart" class="form-label">시작일</label>
+          <label for="newStart" class="form-label text-white">시작일</label>
           <input type="date" name="Start" id="newStart" class="form-control" required>
         </div>
         <div class="col-md-4 mb-3">
-          <label for="newFinish" class="form-label">종료일</label>
+          <label for="newFinish" class="form-label text-white">종료일</label>
           <input type="date" name="Finish" id="newFinish" class="form-control" required>
         </div>
         <div class="col-md-4 mb-3">
-          <label for="newStatus" class="form-label">상태</label>
+          <label for="newStatus" class="form-label text-white">상태</label>
           <select name="Status" id="newStatus" class="form-select" required>
             <option value="달성">달성</option>
             <option value="미달성">미달성</option>
@@ -74,7 +92,7 @@
         </div>
       </div>
       <div class="mb-3">
-        <label for="newDetail" class="form-label">세부 목표</label>
+        <label for="newDetail" class="form-label text-white">세부 목표</label>
         <input type="text" name="세부 목표" id="newDetail" class="form-control" placeholder="세부 목표 내용을 입력하세요" required>
       </div>
       <div class="d-flex justify-content-end">
