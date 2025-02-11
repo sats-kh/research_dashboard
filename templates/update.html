@@ -98,12 +98,12 @@
         <!-- 예산 관련 -->
         <div class="row g-2">
           <div class="col-md-6 mb-3">
-            <label for="total_cost" class="form-label text-white">총 예산(단위: 백만원)</label>
-            <input type="number" class="form-control" name="total_cost" id="total_cost" required>
+            <label for="total_cost" class="form-label text-white">총 예산(단위: 억원)</label>
+            <input type="number" class="form-control" name="total_cost"  step="0.01" id="total_cost" required>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="current_expenditure" class="form-label text-white">현재 소진 금액(단위: 백만원)</label>
-            <input type="number" class="form-control" name="current_expenditure" id="current_expenditure" required>
+            <label for="current_expenditure" class="form-label text-white">현재 소진 금액(단위: 억원)</label>
+            <input type="number" class="form-control" name="current_expenditure"  step="0.01" id="current_expenditure" required>
           </div>
         </div>
         
@@ -202,12 +202,12 @@
         <!-- 예산 및 논문 -->
         <div class="row g-2 mt-2">
           <div class="col-md-3">
-            <label class="form-label">총 예산(단위: 백만원)</label>
-            <input type="number" name="total_cost" value="{{ project.total_cost }}" class="form-control" required>
+            <label class="form-label">총 예산(단위: 억원)</label>
+            <input type="number" name="total_cost" value="{{ project.total_cost }}"  step="0.01" class="form-control" required>
           </div>
           <div class="col-md-3">
-            <label class="form-label">소진 금액(단위: 백만원)</label>
-            <input type="number" name="current_expenditure" value="{{ project.current_expenditure }}" class="form-control" required>
+            <label class="form-label">소진 금액(단위: 억원)</label>
+            <input type="number" name="current_expenditure" value="{{ project.current_expenditure }}"  step="0.01" class="form-control" required>
           </div>
           <div class="col-md-3">
             <label class="form-label">논문 목표</label>

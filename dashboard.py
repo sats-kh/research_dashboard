@@ -146,7 +146,7 @@ def init_dashboard(flask_app):
                                 html.H2(
                                         children=[
                                             html.Span(f"{total_budget}", style={"fontSize": "120px"}),
-                                            html.Span(" 백만원", style={"fontSize": "48px",})
+                                            html.Span(" 억원", style={"fontSize": "48px",})
                                         ],
                                         style={
                                             "fontFamily": "'Pretendard', sans-serif",

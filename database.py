@@ -18,8 +18,8 @@ def create_database():
             manager TEXT NOT NULL,
             start_date TEXT NOT NULL,
             end_date TEXT NOT NULL,
-            total_cost INTEGER NOT NULL,
-            current_expenditure INTEGER NOT NULL,
+            total_cost REAL NOT NULL,             -- 정수에서 부동소수점(REAL)로 변경
+            current_expenditure REAL NOT NULL,      -- 정수에서 부동소수점(REAL)로 변경
             goal_papers INTEGER DEFAULT 0,
             current_papers INTEGER DEFAULT 0,
             goal_patents_filed INTEGER DEFAULT 0,

@@ -18,16 +18,17 @@ def update():
             manager = request.form.get("manager", "")
             start_date = request.form.get("start_date", "")
             end_date = request.form.get("end_date", "")
-            total_cost = int(request.form.get("total_cost", "0"))
-            current_expenditure = int(request.form.get("current_expenditure", "0"))
-            goal_papers = int(request.form.get("goal_papers", "0"))
-            current_papers = int(request.form.get("current_papers", "0"))
-            goal_patents_filed = int(request.form.get("goal_patents_filed", "0"))
-            current_patents_filed = int(request.form.get("current_patents_filed", "0"))
-            goal_patents_registered = int(request.form.get("goal_patents_registered", "0"))
-            current_patents_registered = int(request.form.get("current_patents_registered", "0"))
-            goal_software = int(request.form.get("goal_software", "0"))
-            current_software = int(request.form.get("current_software", "0"))
+            total_cost = float(request.form.get("total_cost", "0") or 0)
+            current_expenditure = float(request.form.get("current_expenditure", "0") or 0)
+            goal_papers = int(request.form.get("goal_papers", "0") or 0)
+            current_papers = int(request.form.get("current_papers", "0") or 0)
+            goal_patents_filed = int(request.form.get("goal_patents_filed", "0") or 0)
+            current_patents_filed = int(request.form.get("current_patents_filed", "0") or 0)
+            goal_patents_registered = int(request.form.get("goal_patents_registered", "0") or 0)
+            current_patents_registered = int(request.form.get("current_patents_registered", "0") or 0)
+            goal_software = int(request.form.get("goal_software", "0") or 0)
+            current_software = int(request.form.get("current_software", "0") or 0)
+
 
             if action == "update" and project_id:
                 update_project(project_id, name, manager, start_date, end_date,
