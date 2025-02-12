@@ -145,7 +145,7 @@ def init_dashboard(flask_app):
                                 html.P("총 예산", style={"fontFamily": "'Pretendard', sans-serif",  "fontSize": "36px", "marginBottom": "0px", "color":"#ACACAC"}),
                                 html.H2(
                                         children=[
-                                            html.Span(f"{total_budget}", style={"fontSize": "120px"}),
+                                            html.Span(f"{total_budget:.2f}", style={"fontSize": "120px"}),
                                             html.Span(" 억원", style={"fontSize": "48px",})
                                         ],
                                         style={
@@ -253,7 +253,7 @@ def init_dashboard(flask_app):
                     },
                     children=[
                         html.P(
-                            "연구과제 마일스톤 진행률",
+                            "연구과제 마일스톤",
                             style={
                                 "textAlign": "left",
                                 "fontFamily": "'Pretendard', sans-serif",

@@ -1,32 +1,49 @@
-# graphs.py
 import math
+import pandas as pd
+from datetime import datetime, timedelta
 import plotly.graph_objs as go
 import plotly.express as px
-from datetime import datetime, timedelta
 from dash import dcc, html
-import pandas as pd
 
+from utils import get_status_color, calculate_progress
+from database import get_projects, get_milestones, DB_NAME
+
+# 미리 지정한 색상 리스트 (15개 이상)
 my_colors = [
-    "#2DB9FF", "#686DFA",  "#FFC300",
-    "#FF00C3", "#FF0000", "#AE00FF",    
+    "#2DB9FF", "#686DFA", "#FFC300",
+    "#FF00C3", "#FF0000", "#AE00FF",
     "#ECFF81", "#FFB5B5", "#2FFFAC",
     "#65FFF0", "#D4FF00", "#E7FF5D",
     "#FF8000", "#0048FF", "#00FF2F",
-    ]
+]
+
+def get_color_mapping_from_projects(projects):
+    """
+    projects: 연구과제 목록 (각 항목은 dict, "name" 키 포함)
+    각 프로젝트 이름에서 앞뒤 공백만 제거한 원본 문자열을 기준으로,
+    고유한 이름을 정렬하여 my_colors 리스트 순서대로 색상을 할당하는 사전을 반환.
+    """
+    cleaned_names = [p["name"].strip() for p in projects]
+    unique_names = sorted(set(cleaned_names))
+    mapping = {name: my_colors[i % len(my_colors)] for i, name in enumerate(unique_names)}
+    return mapping
+
+# 전역 변수: COLOR_MAPPING (애플리케이션 초기 실행 시 업데이트)
+COLOR_MAPPING = {}
 
 def create_progress_graph(projects):
-    # Plotly 기본 색상 팔레트 사용
-    color_palette = px.colors.qualitative.Plotly
-
-    # 프로젝트 이름 리스트와 고유 이름 목록 생성
-    project_names = [p["name"] for p in projects]
-    unique_names = sorted(set(project_names))
+    global COLOR_MAPPING
+    # 프로젝트 목록을 순회하면서, COLOR_MAPPING에 누락된 이름이 있으면 추가
+    for p in projects:
+        key = p["name"].strip()
+        if key not in COLOR_MAPPING:
+            # 기존 매핑 개수를 기준으로 새로운 색상 할당 (색상 리스트를 순환)
+            COLOR_MAPPING[key] = my_colors[len(COLOR_MAPPING) % len(my_colors)]
+    # print("Progress COLOR_MAPPING:", COLOR_MAPPING)
     
-    # 고유한 프로젝트 이름에 대해 색상 매핑 사전 생성
-    color_mapping = {name: my_colors[i % len(my_colors)] for i, name in enumerate(unique_names)}
-    
-    # 각 프로젝트에 대해 매핑된 색상을 사용 (project_names 순서를 유지)
-    colors = [color_mapping[name] for name in project_names]
+    # 프로젝트 이름은 앞뒤 공백만 제거하여 사용
+    project_names = [p["name"].strip() for p in projects]
+    colors = [COLOR_MAPPING[p["name"].strip()] for p in projects]
     
     fig = go.Figure()
     fig.add_trace(go.Bar(
@@ -58,12 +75,15 @@ def create_progress_graph(projects):
         linewidth=2,
         tickfont=dict(family="Pretendard", size=36, color="white")
     )
-    fig.update_yaxes(tickfont=dict(family="Pretendard", size=20, color="white"))
+    fig.update_yaxes(
+        tickfont=dict(family="Pretendard", size=20, color="white")
+    )
     
     return fig  # Figure 객체 반환
 
 def create_research_graphs(projects):
     research_graphs = []
+    # 연구성과 지표용 색상은 카테고리별로 고정
     category_colors = {
         "논문": "#ECECEC",
         "특허": "#8A8A8A",
@@ -71,7 +91,7 @@ def create_research_graphs(projects):
     }
     
     for project in projects:
-        project_name = project["name"]
+        project_name = project["name"].strip()
         final_results = {
             "논문": project.get("goal_papers", 0),
             "특허": project.get("goal_patents_filed", 0) + project.get("goal_patents_registered", 0),
@@ -105,12 +125,10 @@ def create_research_graphs(projects):
             template="plotly_dark",
             barmode="stack",
             height=400,
-            margin=dict(l=40, r=20, t=40, b=40),
+            margin=dict(l=40, r=20, t=40, b=70),
             showlegend=False,
             paper_bgcolor="#2E2E3E",
             plot_bgcolor="#2E2E3E"
-            # paper_bgcolor="#3C3C49",
-            # plot_bgcolor="#3C3C49"
         )
         
         fig.update_xaxes(
@@ -120,12 +138,17 @@ def create_research_graphs(projects):
             side="bottom"
         )
         
-        # y축 tick을 정수 단위로 표시
-        fig.update_yaxes(tickmode="linear", dtick=1,tickfont=dict(family="Pretendard", size=20, color="white"))
-
-        # x축 아래쪽에 제목(annotation) 배치
+        fig.update_yaxes(
+            tickmode="linear",
+            dtick=1,
+            showgrid=True,
+            gridcolor="#545464",
+            gridwidth=1,
+            tickson="boundaries",
+            tickfont=dict(family="Pretendard", size=20, color="white")
+        )
+        
         fig.update_layout(
-            margin=dict(l=40, r=20, t=40, b=70),
             annotations=[
                 dict(
                     text=project_name,
@@ -141,16 +164,13 @@ def create_research_graphs(projects):
         
         research_graphs.append(fig)
     
-    # 각 Figure 객체들을 dcc.Graph로 감싸고, 둥근 모서리를 적용하는 div로 감싸기
     graph_components = [
         html.Div(
             children=dcc.Graph(figure=f, style={"width": "100%"}),
             style={
                 "width": "100%",
                 "borderRadius": "30px",
-                "overflow": "hidden",  # 자식 요소를 둥근 모서리에 맞게 자름
-                # "boxShadow": "2px 2px 8px rgba(0,0,0,0.5)",
-                # 여기서는 개별 카드의 높이를 고정하지 않고 내용에 맞춰 auto로 설정
+                "overflow": "hidden",
                 "height": "auto"
             }
         )
@@ -162,7 +182,7 @@ def create_research_graphs(projects):
         style={
             "display": "flex",
             "flexDirection": "row",
-            "gap": "30px",  # 30px로 변경
+            "gap": "30px",
             "overflowX": "auto"
         }
     )
@@ -172,13 +192,10 @@ def create_milestone_graph(milestones_data):
     milestones_data: DB에서 불러온 마일스톤 데이터 리스트 
       (각 항목은 딕셔너리이며, 키는 "Milestone", "Start", "Finish", "Status", "세부 목표", "담당자" 등을 포함)
     """
-    # DB 데이터를 DataFrame으로 변환
     df = pd.DataFrame(milestones_data)
     
-    # 만약 DB에 데이터가 없으면, 샘플 데이터를 사용 (샘플 데이터에 담당자도 포함)
     if df.empty:
         now = datetime.now()
-
         data = [
             {
                 "Milestone": "AI", 
@@ -263,16 +280,22 @@ def create_milestone_graph(milestones_data):
         ]
         df = pd.DataFrame(data)
     
-    # 만약 DB 데이터에 "담당자" 컬럼이 없는 경우, 빈 문자열로 채움 (예방 코드)
     if "담당자" not in df.columns:
         df["담당자"] = ""
     
-    # df["label"] = df["세부 목표"].astype(str) + " (" + df["담당자"].astype(str) + ")"
+    # label: 세부 목표만 사용 (추가 공백 포함)
     df["label"] = df["세부 목표"].astype(str) + "    "
     
-    # 고유한 Milestone 이름 목록 생성
-    unique_milestones = sorted(set(df["Milestone"].unique()))
-    color_mapping = {name: my_colors[i % len(my_colors)] for i, name in enumerate(unique_milestones)}
+    # Milestone 값은 strip()만 적용 (원본 그대로 사용)
+    df["Milestone"] = df["Milestone"].str.strip()
+    unique_milestones = sorted(set(df["Milestone"]))
+    
+    global COLOR_MAPPING
+    # 전역 COLOR_MAPPING에 누락된 Milestone 이름이 있으면 추가
+    for name in unique_milestones:
+        if name not in COLOR_MAPPING:
+            COLOR_MAPPING[name] = my_colors[len(COLOR_MAPPING) % len(my_colors)]
+    # print("COLOR_MAPPING:", COLOR_MAPPING)
     
     fig = px.timeline(
         df,
@@ -281,7 +304,7 @@ def create_milestone_graph(milestones_data):
         y="Milestone",
         color="Milestone",
         text="label",
-        color_discrete_map=color_mapping  # 지정한 색상 매핑 사용
+        color_discrete_map=COLOR_MAPPING
     )
     
     fig.update_yaxes(autorange="reversed")
@@ -289,8 +312,7 @@ def create_milestone_graph(milestones_data):
     for trace in fig.data:
         trace.update(
             textposition='inside',
-            # insidetextanchor='middle',  # 텍스트를 바 내부 중앙에 정렬
-            textfont=dict(family="Pretendard", size=36, color="white", ),
+            textfont=dict(family="Pretendard", size=36, color="white"),
             width=0.95,
         )
     
@@ -338,36 +360,63 @@ def create_milestone_graph(milestones_data):
             "overflowX": "hidden"
         }
     )
-    
+
 def create_budget_graph(projects):
     fig = go.Figure()
-    for idx, p in enumerate(projects):
+
+    # 각 프로젝트의 제목에 따른 색상 할당 (COLOR_MAPPING에 없는 경우 기본값 "#FFD700")
+    # (COLOR_MAPPING은 미리 정의되어 있다고 가정)
+    for p in projects:
+        bar_color = COLOR_MAPPING.get(p["name"].strip(), "#FFD700")
         fig.add_trace(go.Indicator(
             mode="gauge+number",
             value=p["current_expenditure"],
-            title={"text": f"{p['name']}"},
+            # 기존 title 속성을 제거하여, 제목은 annotation으로 처리합니다.
             gauge={
                 "axis": {
                     "range": [0, p["total_cost"]],
-                    "ticks": "",       # 틱 마크 제거
-                    "ticklen": 0       # 틱 길이 0으로 설정
+                    "tickfont": {"family": "Pretendard", "size": 18, "color": "white"},
+                    "showticklabels": True
                 },
-                "bar": {"color": "#FFD700"}
+                "bar": {"color": bar_color},
+                "bordercolor": "#ECECEC",
+                "steps": [
+                    {"range": [0, p["total_cost"] * 0.5], "color": "#3C3C49"},
+                    {"range": [p["total_cost"] * 0.5, p["total_cost"]], "color": "#8A8A8A"}
+                ],
+                "threshold": {
+                    "line": {"color": "red", "width": 4},
+                    "thickness": 0.75,
+                    "value": p["total_cost"] * 0.9
+                }
             },
-            domain={"row": 0, "column": idx}
+            domain={"row": 0, "column": projects.index(p)}
         ))
+    
+    # grid 설정: 1행, n열
     fig.update_layout(
-        title=dict(
-            text="과제비 집행률(단위: 백만원)",
-            x=0.5,
-            xanchor="center",
-            font=dict(family="Arial Bold", size=20, color="white")
-        ),
         template="plotly_dark",
         grid={"rows": 1, "columns": len(projects)},
-        height=300,
-        margin=dict(l=40, r=20, t=40, b=40),
+        height=350,
+        margin=dict(l=40, r=20, t=50, b=80),  # 하단 여백을 늘려서 annotation 공간 확보
         paper_bgcolor="#2E2E3E",
         plot_bgcolor="#2E2E3E"
     )
-    return fig  # Figure 객체 반환
+    
+    # 각 게이지 아래에 연구과제 제목(annotation) 추가
+    num_projects = len(projects)
+    for i, p in enumerate(projects):
+        # grid의 각 셀는 전체 width에서 (i/n ~ (i+1)/n)에 해당하므로 중앙은 (i+0.5)/n
+        fig.add_annotation(
+            x=(i + 0.48) / num_projects,
+            y=-0.05,  # y축 paper 좌표: 0보다 낮게 설정하여 게이지 아래에 위치
+            xref="paper",
+            yref="paper",
+            text=f"<b>{p['name']}</b>",
+            showarrow=False,
+            font={"family": "Pretendard", "size": 20, "color": "white"},
+            xanchor="center",
+            yanchor="top"
+        )
+    
+    return fig

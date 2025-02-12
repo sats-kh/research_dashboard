@@ -29,7 +29,6 @@ def update():
             goal_software = int(request.form.get("goal_software", "0") or 0)
             current_software = int(request.form.get("current_software", "0") or 0)
 
-
             if action == "update" and project_id:
                 update_project(project_id, name, manager, start_date, end_date,
                                total_cost, current_expenditure,
